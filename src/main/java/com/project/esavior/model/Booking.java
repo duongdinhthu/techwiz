@@ -1,6 +1,7 @@
 package com.project.esavior.model;
 
 import jakarta.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -15,8 +16,9 @@ public class Booking {
     @Column(name = "booking_date")
     private Date bookingDate;
 
-    @Column(name = "patient_id")
-    private Integer patientId;
+    @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patients patient;
 
     @Column(name = "booking_status")
     private String bookingStatus;
@@ -29,8 +31,36 @@ public class Booking {
     @ManyToOne
     @JoinColumn(name = "ambulance_id")
     private Ambulance ambulance;
+
+    @ManyToOne
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
+
+
+    @Column(name = "pickup_time")
+    private Date pickupTime;
+
+    @Column(name = "booking_type")
+    private String bookingType;
+
     // Constructors
     public Booking() {
+    }
+
+    public Date getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(Date pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public String getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
     }
 
     public Ambulance getAmbulance() {
@@ -58,15 +88,21 @@ public class Booking {
         this.bookingDate = bookingDate;
     }
 
-    public Integer getPatientId() {
-        return patientId;
+    public Patients getPatient() {
+        return patient;
     }
 
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
+    public void setPatient(Patients patient) {
+        this.patient = patient;
     }
 
+    public Hospital getHospital() {
+        return hospital;
+    }
 
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
+    }
 
     public String getBookingStatus() {
         return bookingStatus;
@@ -92,15 +128,4 @@ public class Booking {
         this.bookingDetails = bookingDetails;
     }
 
-    @Override
-    public String toString() {
-        return "Booking{" +
-                "bookingId=" + bookingId +
-                ", bookingDate=" + bookingDate +
-                ", patientId=" + patientId +
-                ", bookingStatus='" + bookingStatus + '\'' +
-                ", bookingAddress='" + bookingAddress + '\'' +
-                ", bookingDetails='" + bookingDetails + '\'' +
-                '}';
-    }
 }

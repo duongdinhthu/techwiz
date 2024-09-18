@@ -16,6 +16,10 @@ public class City {
     @OneToMany(mappedBy = "city")
     private List<Hospital> hospitals;
 
+    @Column(name = "city_name")
+
+
+
     public Integer getCityId() {
         return cityId;
     }

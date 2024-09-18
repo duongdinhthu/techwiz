@@ -1,5 +1,8 @@
 package com.project.esavior.model;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -24,6 +27,28 @@ public class Admin {
 
     @Column(name = "admin_address")
     private String adminAddress;
+
+    @Column(name = "admin_created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "admin_updated_at")
+    private LocalDateTime updatedAt;
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     public Integer getAdminId() {
         return adminId;

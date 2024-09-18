@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/drivers")
 public class DriverController {
@@ -20,6 +23,9 @@ public class DriverController {
     public ResponseEntity<String> loginDriver(@RequestParam String email, @RequestParam String password) {
         Driver authenticatedDriver = driverService.authenticateDriver(email, password);
         if (authenticatedDriver != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login successful");
+            response.put("driver", authenticatedDriver.getDriverId());
             return ResponseEntity.ok("Login successful");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");

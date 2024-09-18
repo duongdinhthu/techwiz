@@ -3,7 +3,6 @@ package com.project.esavior.service;
 import com.project.esavior.model.Patients;
 import com.project.esavior.repository.PatientsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,25 +11,23 @@ import java.util.Optional;
 public class PatientsService {
 
     private final PatientsRepository patientsRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public PatientsService(PatientsRepository patientsRepository, BCryptPasswordEncoder passwordEncoder) {
+    public PatientsService(PatientsRepository patientsRepository) {
         this.patientsRepository = patientsRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     // Đăng ký bệnh nhân mới
     public Patients registerPatient(Patients patient) {
-        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
-        patient.setPassword(passwordEncoder.encode(patient.getPassword()));
+        // Lưu mật khẩu trực tiếp mà không mã hóa
         return patientsRepository.save(patient);
     }
 
     // Xác thực đăng nhập
     public Patients authenticatePatient(String email, String password) {
         Patients patient = patientsRepository.findByEmail(email);
-        if (patient != null && passwordEncoder.matches(password, patient.getPassword())) {
+        // So sánh mật khẩu trực tiếp mà không mã hóa
+        if (patient != null && patient.getPassword().equals(password)) {
             return patient; // Xác thực thành công
         }
         return null; // Xác thực thất bại
@@ -49,9 +46,9 @@ public class PatientsService {
             patient.setPhoneNumber(updatedPatient.getPhoneNumber());
             patient.setAddress(updatedPatient.getAddress());
             patient.setEmergencyContact(updatedPatient.getEmergencyContact());
-            // Nếu mật khẩu được cập nhật, mã hóa nó trước khi lưu
+            // Nếu mật khẩu được cập nhật, lưu trực tiếp mà không mã hóa
             if (updatedPatient.getPassword() != null && !updatedPatient.getPassword().isEmpty()) {
-                patient.setPassword(passwordEncoder.encode(updatedPatient.getPassword()));
+                patient.setPassword(updatedPatient.getPassword());
             }
             return patientsRepository.save(patient);
         }).orElseThrow(() -> new IllegalArgumentException("Patient not found with ID: " + patientId));

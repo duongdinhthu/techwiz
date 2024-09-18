@@ -39,20 +39,12 @@
 
         <!-- Spring Boot Starter Security -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version> <!-- Ensure you specify the version -->
         </dependency>
         <!-- JWT -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency>
+
 
         <!-- Lombok (Nếu bạn cần sử dụng Lombok) -->
         <dependency>

@@ -5,7 +5,6 @@ import com.project.esavior.model.Driver;
 import com.project.esavior.repository.BookingRepository;
 import com.project.esavior.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,19 +14,18 @@ public class DriverService {
 
     private final DriverRepository driverRepository;
     private final BookingRepository bookingRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public DriverService(DriverRepository driverRepository, BookingRepository bookingRepository, BCryptPasswordEncoder passwordEncoder) {
+    public DriverService(DriverRepository driverRepository, BookingRepository bookingRepository) {
         this.driverRepository = driverRepository;
         this.bookingRepository = bookingRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
     // Đăng nhập tài xế
     public Driver authenticateDriver(String email, String password) {
         Driver driver = driverRepository.findByEmail(email);
-        if (driver != null && passwordEncoder.matches(password, driver.getPassword())) {
+        // So sánh mật khẩu trực tiếp mà không mã hóa
+        if (driver != null && driver.getPassword().equals(password)) {
             return driver; // Xác thực thành công
         }
         return null; // Xác thực thất bại
@@ -42,13 +40,7 @@ public class DriverService {
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + driverId));
     }
-    private boolean isValidStatus(String status) {
-        // Thêm các trạng thái hợp lệ vào danh sách này
-        return status.equalsIgnoreCase("Pending") ||
-                status.equalsIgnoreCase("Accepted") ||
-                status.equalsIgnoreCase("Completed") ||
-                status.equalsIgnoreCase("Waiting List");
-    }
+
     // Cập nhật trạng thái đặt chỗ
     public Booking updateBookingStatus(Integer bookingId, String status) {
         return bookingRepository.findById(bookingId)
@@ -59,4 +51,3 @@ public class DriverService {
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found with ID: " + bookingId));
     }
 }
-

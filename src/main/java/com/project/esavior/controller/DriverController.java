@@ -29,16 +29,13 @@ public class DriverController {
         Driver authenticatedDriver = driverService.authenticateDriver(driverEmail, driverPassword);
 
         if (authenticatedDriver != null) {
-            // Tạo phản hồi với thông tin tài xế
-            Map<String, Object> response = new HashMap<>();
-            response.put("driverName", authenticatedDriver.getDriverName());
-            response.put("driverId", authenticatedDriver.getDriverId()); // Thêm driverId vào phản hồi
-            // Thêm các thông tin khác nếu cần thiết
-            return ResponseEntity.ok(response);
+            // Trả về toàn bộ đối tượng Driver
+            return ResponseEntity.ok(authenticatedDriver);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("success", false));
         }
     }
+
 
 
     // Quản lý tình trạng xe cứu thương

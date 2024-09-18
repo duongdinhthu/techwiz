@@ -26,7 +26,9 @@ public class DriverService {
         Driver driver = driverRepository.findByEmail(email);
         // So sánh mật khẩu trực tiếp mà không mã hóa
         if (driver != null && driver.getPassword().equals(password)) {
+            System.out.println("===================================ok");
             return driver; // Xác thực thành công
+
         }
         return null; // Xác thực thất bại
     }

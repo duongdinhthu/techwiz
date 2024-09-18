@@ -15,6 +15,12 @@ public class Driver {
     @Column(name = "driver_name", nullable = false)
     private String driverName;
 
+    @Column(name = "email", unique = true) // Thêm trường email
+    private String email;
+
+    @Column(name = "password")
+    private String password;
+
     @Column(name = "driver_phone", nullable = false, unique = true)
     private String driverPhone;
 
@@ -37,6 +43,22 @@ public class Driver {
     public Driver() {}
 
     // Getters and Setters for each field
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public Integer getDriverId() {
         return driverId;

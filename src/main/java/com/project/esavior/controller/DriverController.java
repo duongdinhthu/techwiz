@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,16 +21,25 @@ public class DriverController {
 
     // Đăng nhập tài xế
     @PostMapping("/login")
-    public ResponseEntity<String> loginDriver(@RequestParam String email, @RequestParam String password) {
-        Driver authenticatedDriver = driverService.authenticateDriver(email, password);
+    public ResponseEntity<?> loginDriver(@RequestBody Map<String, String> loginRequest) {
+        String driverEmail = loginRequest.get("email");
+        String driverPassword = loginRequest.get("password");
+
+        // Xác thực tài xế
+        Driver authenticatedDriver = driverService.authenticateDriver(driverEmail, driverPassword);
+
         if (authenticatedDriver != null) {
+            // Tạo phản hồi với thông tin tài xế
             Map<String, Object> response = new HashMap<>();
-            response.put("message", "Login successful");
-            response.put("driver", authenticatedDriver.getDriverId());
-            return ResponseEntity.ok("Login successful");
+            response.put("driverName", authenticatedDriver.getDriverName());
+            response.put("driverId", authenticatedDriver.getDriverId()); // Thêm driverId vào phản hồi
+            // Thêm các thông tin khác nếu cần thiết
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("success", false));
         }
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
     }
+
 
     // Quản lý tình trạng xe cứu thương
     @PutMapping("/{driverId}/status")

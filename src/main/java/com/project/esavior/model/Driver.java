@@ -39,6 +39,10 @@ public class Driver {
     @Column(name = "driver_updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "hospital_id")
+    private Hospital hospital;
+
     // Constructors, Getters và Setters
     public Driver() {}
 
@@ -46,6 +50,14 @@ public class Driver {
 
     public String getEmail() {
         return email;
+    }
+
+    public Hospital getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(Hospital hospital) {
+        this.hospital = hospital;
     }
 
     public void setEmail(String email) {

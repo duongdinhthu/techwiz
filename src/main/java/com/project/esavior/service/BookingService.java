@@ -10,22 +10,30 @@ import java.util.List;
 @Service
 public class BookingService {
 
+    private final BookingRepository bookingRepository;
+
     @Autowired
-    private BookingRepository bookingRepository;
-
-    public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+    public BookingService(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
     }
 
-    public Booking getBookingById(Integer id) {
-        return bookingRepository.findById(id).orElse(null);
+    // Tìm kiếm chi tiết đặt chỗ theo tên bệnh viện
+    public List<Booking> findByHospitalName(String hospitalName) {
+        return bookingRepository.findByHospital_HospitalName(hospitalName);
     }
 
-    public Booking saveBooking(Booking booking) {
-        return bookingRepository.save(booking);
+    // Tìm kiếm chi tiết đặt chỗ theo thành phố
+    public List<Booking> findByCityName(String cityName) {
+        return bookingRepository.findByHospital_City_CityName(cityName);
     }
 
-    public void deleteBooking(Integer id) {
-        bookingRepository.deleteById(id);
+    // Tìm kiếm theo tên bệnh viện và thành phố
+    public List<Booking> findByHospitalNameAndCityName(String hospitalName, String cityName) {
+        return bookingRepository.findByHospital_HospitalNameAndHospital_City_CityName(hospitalName, cityName);
+    }
+
+    // Tìm kiếm tất cả đặt chỗ liên quan đến một từ khóa (search)
+    public List<Booking> searchBookings(String keyword) {
+        return bookingRepository.findByHospital_HospitalNameContainingOrHospital_City_CityNameContaining(keyword, keyword);
     }
 }

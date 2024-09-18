@@ -14,6 +14,9 @@ public class Patients {
     @Column(name = "patient_id")
     private Integer patientId;
 
+    @Column(name = "email", unique = true) // Đảm bảo trường này tồn tại
+    private String email;
+
     @Column(name = "patient_name", nullable = false)
     private String patientName;
 
@@ -43,7 +46,14 @@ public class Patients {
     public Patients() {
     }
 
-    // Getters and Setters for each field
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+// Getters and Setters for each field
 
     public Integer getPatientId() {
         return patientId;

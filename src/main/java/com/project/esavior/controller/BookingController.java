@@ -11,26 +11,34 @@ import java.util.List;
 @RequestMapping("/api/bookings")
 public class BookingController {
 
+    private final BookingService bookingService;
+
     @Autowired
-    private BookingService bookingService;
-
-    @GetMapping
-    public List<Booking> getAllBookings() {
-        return bookingService.getAllBookings();
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
     }
 
-    @GetMapping("/{id}")
-    public Booking getBookingById(@PathVariable Integer id) {
-        return bookingService.getBookingById(id);
+    // Tìm kiếm chi tiết đặt chỗ theo tên bệnh viện
+    @GetMapping("/hospital")
+    public List<Booking> getBookingsByHospitalName(@RequestParam String hospitalName) {
+        return bookingService.findByHospitalName(hospitalName);
     }
 
-    @PostMapping
-    public Booking createBooking(@RequestBody Booking booking) {
-        return bookingService.saveBooking(booking);
+    // Tìm kiếm chi tiết đặt chỗ theo thành phố
+    @GetMapping("/city")
+    public List<Booking> getBookingsByCityName(@RequestParam String cityName) {
+        return bookingService.findByCityName(cityName);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteBooking(@PathVariable Integer id) {
-        bookingService.deleteBooking(id);
+    // Tìm kiếm theo tên bệnh viện và thành phố
+    @GetMapping("/search")
+    public List<Booking> getBookingsByHospitalAndCity(@RequestParam String hospitalName, @RequestParam String cityName) {
+        return bookingService.findByHospitalNameAndCityName(hospitalName, cityName);
+    }
+
+    // Tìm kiếm tất cả đặt chỗ liên quan đến một từ khóa (search)
+    @GetMapping("/keyword")
+    public List<Booking> searchBookings(@RequestParam String keyword) {
+        return bookingService.searchBookings(keyword);
     }
 }

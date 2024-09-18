@@ -11,8 +11,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/patients")
 public class PatientsController {
 
+    private final PatientsService patientsService;
+
     @Autowired
-    private PatientsService patientsService;
+    public PatientsController(PatientsService patientsService) {
+        this.patientsService = patientsService;
+    }
 
     // Đăng ký bệnh nhân mới
     @PostMapping("/register")
@@ -29,5 +33,24 @@ public class PatientsController {
             return ResponseEntity.ok("Login successful");
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+    }
+
+    // Xem thông tin hồ sơ bệnh nhân
+    @GetMapping("/profile/{id}")
+    public ResponseEntity<Patients> getPatientProfile(@PathVariable Integer id) {
+        return patientsService.getPatientProfile(id)
+                .map(ResponseEntity::ok)
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    // Cập nhật thông tin hồ sơ bệnh nhân
+    @PutMapping("/profile/{id}")
+    public ResponseEntity<Patients> updatePatientProfile(@PathVariable Integer id, @RequestBody Patients updatedPatient) {
+        try {
+            Patients updatedProfile = patientsService.updatePatientProfile(id, updatedPatient);
+            return ResponseEntity.ok(updatedProfile);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }

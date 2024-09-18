@@ -14,7 +14,7 @@ public class DriverController {
 
     // Quản lý tình trạng xe cứu thương
     @PutMapping("/{driverId}/status")
-    public Driver updateDriverStatus(@PathVariable Long driverId, @RequestParam String status) {
+    public Driver updateDriverStatus(@PathVariable Integer driverId, @RequestParam String status) {
         return driverService.updateDriverStatus(driverId, status);
     }
 

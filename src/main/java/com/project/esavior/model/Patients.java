@@ -1,10 +1,12 @@
 package com.project.esavior.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "patients") // Tên bảng trong cơ sở dữ liệu
+@Table(name = "patients")
 public class Patients {
 
     @Id
@@ -12,41 +14,37 @@ public class Patients {
     @Column(name = "patient_id")
     private Integer patientId;
 
-    @Column(name = "patient_name")
+    @Column(name = "patient_name", nullable = false)
     private String patientName;
 
-    @Column(name = "patient_dob")
-    private Date patientDob;
+    @Column(name = "phone_number", nullable = false, unique = true)
+    private String phoneNumber;
 
-    @Column(name = "patient_email")
-    private String patientEmail;
+    @Column(name = "address")
+    private String address;
 
-    @Column(name = "patient_phone")
-    private Integer patientPhone;
+    @Column(name = "zip_code")
+    private String zipCode;
 
-    @Column(name = "patient_address")
-    private String patientAddress;
+    @Column(name = "emergency_contact")
+    private String emergencyContact;
 
-    @Column(name = "patient_password")
-    private String patientPassword;
+    @OneToMany(mappedBy = "patient")
+    private List<Booking> bookings;
+    @Column(name = "password", nullable = false)
+    private String password;
+    @Column(name = "patient_created_at")
+    private LocalDateTime createdAt;
 
-    @Column(name = "patient_username")
-    private String patientUsername;
+    @Column(name = "patient_updated_at")
+    private LocalDateTime updatedAt;
 
-    @Column(name = "patient_gender")
-    private String patientGender;
-
-    @Column(name = "patient_code")
-    private String patientCode;
-
-    @Column(name = "patient_img")
-    private String patientImg; // Lưu trữ đường dẫn ảnh
-
-    // Constructors
+    // Constructors, Getters và Setters
     public Patients() {
     }
 
-    // Getters và Setters
+    // Getters and Setters for each field
+
     public Integer getPatientId() {
         return patientId;
     }
@@ -63,92 +61,67 @@ public class Patients {
         this.patientName = patientName;
     }
 
-    public Date getPatientDob() {
-        return patientDob;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPatientDob(Date patientDob) {
-        this.patientDob = patientDob;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public String getPatientEmail() {
-        return patientEmail;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPatientEmail(String patientEmail) {
-        this.patientEmail = patientEmail;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Integer getPatientPhone() {
-        return patientPhone;
+    public String getAddress() {
+        return address;
     }
 
-    public void setPatientPhone(Integer patientPhone) {
-        this.patientPhone = patientPhone;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public String getPatientAddress() {
-        return patientAddress;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setPatientAddress(String patientAddress) {
-        this.patientAddress = patientAddress;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
-    public String getPatientPassword() {
-        return patientPassword;
+    public String getEmergencyContact() {
+        return emergencyContact;
     }
 
-    public void setPatientPassword(String patientPassword) {
-        this.patientPassword = patientPassword;
+    public void setEmergencyContact(String emergencyContact) {
+        this.emergencyContact = emergencyContact;
     }
 
-    public String getPatientUsername() {
-        return patientUsername;
+    public List<Booking> getBookings() {
+        return bookings;
     }
 
-    public void setPatientUsername(String patientUsername) {
-        this.patientUsername = patientUsername;
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 
-    public String getPatientGender() {
-        return patientGender;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setPatientGender(String patientGender) {
-        this.patientGender = patientGender;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getPatientCode() {
-        return patientCode;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setPatientCode(String patientCode) {
-        this.patientCode = patientCode;
-    }
-
-    public String getPatientImg() {
-        return patientImg;
-    }
-
-    public void setPatientImg(String patientImg) {
-        this.patientImg = patientImg;
-    }
-
-    @Override
-    public String toString() {
-        return "Patients{" +
-                "patientId=" + patientId +
-                ", patientName='" + patientName + '\'' +
-                ", patientDob=" + patientDob +
-                ", patientEmail='" + patientEmail + '\'' +
-                ", patientPhone=" + patientPhone +
-                ", patientAddress='" + patientAddress + '\'' +
-                ", patientPassword='" + patientPassword + '\'' +
-                ", patientUsername='" + patientUsername + '\'' +
-                ", patientGender='" + patientGender + '\'' +
-                ", patientCode='" + patientCode + '\'' +
-                ", patientImg='" + patientImg + '\'' +
-                '}';
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

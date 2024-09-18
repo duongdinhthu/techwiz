@@ -1,24 +1,34 @@
 package com.project.esavior.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "cities")
 public class City {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "city_id")
     private Integer cityId;
 
-    @Column(name = "city_name")
+    @Column(name = "city_name", nullable = false)
     private String cityName;
 
     @OneToMany(mappedBy = "city")
     private List<Hospital> hospitals;
 
-    @Column(name = "city_name")
+    @Column(name = "city_created_at")
+    private LocalDateTime createdAt;
 
+    @Column(name = "city_updated_at")
+    private LocalDateTime updatedAt;
 
+    // Constructors, Getters và Setters
+    public City() {}
+
+    // Getters and Setters for each field
 
     public Integer getCityId() {
         return cityId;
@@ -44,5 +54,19 @@ public class City {
         this.hospitals = hospitals;
     }
 
-    // Constructors, Getters, và Setters
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

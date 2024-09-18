@@ -11,30 +11,52 @@ import java.util.List;
 
 @Service
 public class DriverService {
-    @Autowired
-    private DriverRepository driverRepository;
+
+    private final DriverRepository driverRepository;
+    private final BookingRepository bookingRepository;
 
     @Autowired
-    private BookingRepository bookingRepository;
+    public DriverService(DriverRepository driverRepository, BookingRepository bookingRepository) {
+        this.driverRepository = driverRepository;
+        this.bookingRepository = bookingRepository;
+    }
 
     // Quản lý tình trạng xe cứu thương
-    public Driver updateDriverStatus(Long driverId, String status) {
-        Driver driver = driverRepository.findById(driverId).orElse(null);
-        if (driver != null) {
-            driver.setStatus(status);
-            return driverRepository.save(driver);
+    public Driver updateDriverStatus(Integer  driverId, String status) {
+        // Kiểm tra trạng thái đầu vào
+        if (!isValidStatus(status)) {
+            throw new IllegalArgumentException("Invalid status");
         }
-        return null;
+
+        return driverRepository.findById(driverId)
+                .map(driver -> {
+                    driver.setStatus(status);
+                    return driverRepository.save(driver);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + driverId));
     }
 
     // Cập nhật trạng thái đặt chỗ
     public Booking updateBookingStatus(Integer bookingId, String status) {
-        Booking booking = bookingRepository.findById(bookingId).orElse(null);
-        if (booking != null) {
-            booking.setBookingStatus(status);
-            return bookingRepository.save(booking);
+        // Kiểm tra trạng thái đầu vào
+        if (!isValidStatus(status)) {
+            throw new IllegalArgumentException("Invalid status");
         }
-        return null;
+
+        return bookingRepository.findById(bookingId)
+                .map(booking -> {
+                    booking.setBookingStatus(status);
+                    return bookingRepository.save(booking);
+                })
+                .orElseThrow(() -> new IllegalArgumentException("Booking not found with ID: " + bookingId));
     }
 
+    // Kiểm tra xem trạng thái có hợp lệ hay không
+    private boolean isValidStatus(String status) {
+        // Thêm các trạng thái hợp lệ vào danh sách này
+        return status.equalsIgnoreCase("Pending") ||
+                status.equalsIgnoreCase("Accepted") ||
+                status.equalsIgnoreCase("Completed") ||
+                status.equalsIgnoreCase("Waiting List");
+    }
 }

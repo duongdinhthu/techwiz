@@ -1,35 +1,49 @@
 package com.project.esavior.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "drivers") // Tên bảng trong cơ sở dữ liệu
+@Table(name = "drivers")
 public class Driver {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "driver_id")
-    private Long driverId;
+    private Integer driverId;
 
-    @Column(name = "driver_name")
+    @Column(name = "driver_name", nullable = false)
     private String driverName;
 
-    @Column(name = "driver_license_number")
-    private String driverLicenseNumber;
-
-    @Column(name = "driver_phone")
+    @Column(name = "driver_phone", nullable = false, unique = true)
     private String driverPhone;
 
-    @Column(name = "driver_address")
-    private String driverAddress;
-    @Column(name = "email")  // Thêm cột email
-    private String email;
+    @Column(name = "license_number", nullable = false, unique = true)
+    private String licenseNumber;
 
-    @Column(name = "status")  // Thêm cột email
+    @OneToOne(mappedBy = "driver")
+    private Ambulance ambulance;
+
+    @Column(name = "status")
     private String status;
 
-    // Constructors
-    public Driver() {
+    @Column(name = "driver_created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "driver_updated_at")
+    private LocalDateTime updatedAt;
+
+    // Constructors, Getters và Setters
+    public Driver() {}
+
+    // Getters and Setters for each field
+
+    public Integer getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Integer driverId) {
+        this.driverId = driverId;
     }
 
     public String getStatus() {
@@ -40,37 +54,12 @@ public class Driver {
         this.status = status;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    // Getters và Setters
-    public Long getDriverId() {
-        return driverId;
-    }
-
-    public void setDriverId(Long driverId) {
-        this.driverId = driverId;
-    }
-
     public String getDriverName() {
         return driverName;
     }
 
     public void setDriverName(String driverName) {
         this.driverName = driverName;
-    }
-
-    public String getDriverLicenseNumber() {
-        return driverLicenseNumber;
-    }
-
-    public void setDriverLicenseNumber(String driverLicenseNumber) {
-        this.driverLicenseNumber = driverLicenseNumber;
     }
 
     public String getDriverPhone() {
@@ -81,22 +70,35 @@ public class Driver {
         this.driverPhone = driverPhone;
     }
 
-    public String getDriverAddress() {
-        return driverAddress;
+    public String getLicenseNumber() {
+        return licenseNumber;
     }
 
-    public void setDriverAddress(String driverAddress) {
-        this.driverAddress = driverAddress;
+    public void setLicenseNumber(String licenseNumber) {
+        this.licenseNumber = licenseNumber;
     }
 
-    @Override
-    public String toString() {
-        return "Driver{" +
-                "driverId=" + driverId +
-                ", driverName='" + driverName + '\'' +
-                ", driverLicenseNumber='" + driverLicenseNumber + '\'' +
-                ", driverPhone='" + driverPhone + '\'' +
-                ", driverAddress='" + driverAddress + '\'' +
-                '}';
+    public Ambulance getAmbulance() {
+        return ambulance;
+    }
+
+    public void setAmbulance(Ambulance ambulance) {
+        this.ambulance = ambulance;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

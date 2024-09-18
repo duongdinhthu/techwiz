@@ -10,24 +10,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
+
     @Autowired
     private BookingService bookingService;
-
-    // Đặt xe cứu thương
-    @PostMapping
-    public Booking createBooking(@RequestBody Booking booking) {
-        return bookingService.createBooking(booking);
-    }
 
     @GetMapping
     public List<Booking> getAllBookings() {
         return bookingService.getAllBookings();
     }
 
-    // Tìm kiếm theo thành phố hoặc bệnh viện
-    @GetMapping("/search")
-    public List<Booking> findBookingsByCityAndHospital(@RequestParam String cityName, @RequestParam String hospitalName) {
-        return bookingService.findBookingsByCityAndHospital(cityName, hospitalName);
+    @GetMapping("/{id}")
+    public Booking getBookingById(@PathVariable Integer id) {
+        return bookingService.getBookingById(id);
     }
 
+    @PostMapping
+    public Booking createBooking(@RequestBody Booking booking) {
+        return bookingService.saveBooking(booking);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteBooking(@PathVariable Integer id) {
+        bookingService.deleteBooking(id);
+    }
 }

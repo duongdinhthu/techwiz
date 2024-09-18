@@ -1,9 +1,7 @@
 package com.project.esavior.model;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "admins")
@@ -13,16 +11,16 @@ public class Admin {
     @Column(name = "admin_id")
     private Integer adminId;
 
-    @Column(name = "admin_name")
+    @Column(name = "admin_name", nullable = false)
     private String adminName;
 
-    @Column(name = "admin_email")
+    @Column(name = "admin_email", nullable = false, unique = true)
     private String adminEmail;
 
-    @Column(name = "admin_password")
+    @Column(name = "admin_password", nullable = false)
     private String adminPassword;
 
-    @Column(name = "admin_phone")
+    @Column(name = "admin_phone", nullable = false)
     private String adminPhone;
 
     @Column(name = "admin_address")
@@ -34,21 +32,8 @@ public class Admin {
     @Column(name = "admin_updated_at")
     private LocalDateTime updatedAt;
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    // Constructors, Getters và Setters
+    public Admin() {}
 
     public Integer getAdminId() {
         return adminId;
@@ -97,5 +82,22 @@ public class Admin {
     public void setAdminAddress(String adminAddress) {
         this.adminAddress = adminAddress;
     }
-// Constructors, Getters và Setters
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    // Getters and Setters for each field
 }

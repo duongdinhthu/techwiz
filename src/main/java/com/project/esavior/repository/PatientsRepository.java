@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PatientsRepository extends JpaRepository<Patients, Integer> {
-    // Các phương thức truy vấn tùy chỉnh nếu cần, ví dụ:
+    // Phương thức để tìm bệnh nhân theo email (sử dụng cho đăng nhập)
+    Patients findByPatientEmail(String email);
 }

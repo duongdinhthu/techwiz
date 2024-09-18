@@ -3,22 +3,31 @@ package com.project.esavior.service;
 import com.project.esavior.model.Patients;
 import com.project.esavior.repository.PatientsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PatientsService {
+
     @Autowired
     private PatientsRepository patientsRepository;
 
-    // Quản lý hồ sơ người dùng
-    public Patients updateProfile(Integer patientId, Patients patientDetails) {
-        Patients patient = patientsRepository.findById(patientId).orElse(null);
-        if (patient != null) {
-            patient.setPatientName(patientDetails.getPatientName());
-            patient.setPatientAddress(patientDetails.getPatientAddress());
-            // Cập nhật các thông tin khác
-            return patientsRepository.save(patient);
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    // Đăng ký bệnh nhân mới
+    public Patients registerPatient(Patients patient) {
+        // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
+        patient.setPassword(passwordEncoder.encode(patient.getPassword()));
+        return patientsRepository.save(patient);
+    }
+
+    // Xác thực đăng nhập
+    public Patients authenticatePatient(String email, String password) {
+        Patients patient = patientsRepository.findByPatientEmail(email);
+        if (patient != null && passwordEncoder.matches(password, patient.getPassword())) {
+            return patient; // Xác thực thành công
         }
-        return null;
+        return null; // Xác thực thất bại
     }
 }

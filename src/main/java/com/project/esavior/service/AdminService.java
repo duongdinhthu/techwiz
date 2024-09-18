@@ -1,9 +1,7 @@
 package com.project.esavior.service;
 
-import com.project.esavior.model.Ambulance;
-import com.project.esavior.model.Booking;
-import com.project.esavior.repository.AmbulanceRepository;
-import com.project.esavior.repository.BookingRepository;
+import com.project.esavior.model.Admin;
+import com.project.esavior.repository.AdminRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,25 +9,23 @@ import java.util.List;
 
 @Service
 public class AdminService {
-    @Autowired
-    private AmbulanceRepository ambulanceRepository;
 
     @Autowired
-    private BookingRepository bookingRepository;
+    private AdminRepository adminRepository;
 
-    // Quản lý xe cứu thương
-    public Ambulance createOrUpdateAmbulance(Ambulance ambulance) {
-        return ambulanceRepository.save(ambulance);
+    public List<Admin> getAllAdmins() {
+        return adminRepository.findAll();
     }
 
-    public List<Ambulance> getAllAmbulances() {
-        return ambulanceRepository.findAll();
+    public Admin getAdminById(Integer id) {
+        return adminRepository.findById(id).orElse(null);
     }
 
-    // Xem chi tiết đặt chỗ
-    public List<Booking> getAllBookings() {
-        return bookingRepository.findAll();
+    public Admin saveAdmin(Admin admin) {
+        return adminRepository.save(admin);
+    }
 
+    public void deleteAdmin(Integer id) {
+        adminRepository.deleteById(id);
     }
 }
-

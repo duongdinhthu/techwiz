@@ -1,7 +1,6 @@
 package com.project.esavior.controller;
 
-import com.project.esavior.model.Ambulance;
-import com.project.esavior.model.Booking;
+import com.project.esavior.model.Admin;
 import com.project.esavior.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,25 +8,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admins")
 public class AdminController {
+
     @Autowired
     private AdminService adminService;
 
-    // Quản lý xe cứu thương
-    @PostMapping("/ambulances")
-    public Ambulance createOrUpdateAmbulance(@RequestBody Ambulance ambulance) {
-        return adminService.createOrUpdateAmbulance(ambulance);
+    @GetMapping
+    public List<Admin> getAllAdmins() {
+        return adminService.getAllAdmins();
     }
 
-    @GetMapping("/ambulances")
-    public List<Ambulance> getAllAmbulances() {
-        return adminService.getAllAmbulances();
+    @GetMapping("/{id}")
+    public Admin getAdminById(@PathVariable Integer id) {
+        return adminService.getAdminById(id);
     }
 
-    // Xem danh sách đặt chỗ
-    @GetMapping("/bookings")
-    public List<Booking> getAllBookings() {
-        return adminService.getAllBookings();
+    @PostMapping
+    public Admin createAdmin(@RequestBody Admin admin) {
+        return adminService.saveAdmin(admin);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteAdmin(@PathVariable Integer id) {
+        adminService.deleteAdmin(id);
     }
 }

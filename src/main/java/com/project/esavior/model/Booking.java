@@ -1,11 +1,10 @@
 package com.project.esavior.model;
 
 import jakarta.persistence.*;
-
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "bookings") // Tên bảng trong cơ sở dữ liệu
+@Table(name = "bookings")
 public class Booking {
 
     @Id
@@ -13,65 +12,41 @@ public class Booking {
     @Column(name = "booking_id")
     private Integer bookingId;
 
-    @Column(name = "booking_date")
-    private Date bookingDate;
-
-    @ManyToOne
-    @JoinColumn(name = "patient_id")
-    private Patients patient;
-
-    @Column(name = "booking_status")
-    private String bookingStatus;
-
-    @Column(name = "booking_address")
-    private String bookingAddress;
-
-    @Column(name = "booking_details")
-    private String bookingDetails;
     @ManyToOne
     @JoinColumn(name = "ambulance_id")
     private Ambulance ambulance;
 
     @ManyToOne
+    @JoinColumn(name = "patient_id")
+    private Patients patient;
+
+    @ManyToOne
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
-
-
-    @Column(name = "pickup_time")
-    private Date pickupTime;
 
     @Column(name = "booking_type")
     private String bookingType;
 
-    // Constructors
-    public Booking() {
-    }
+    @Column(name = "pickup_address")
+    private String pickupAddress;
 
-    public Date getPickupTime() {
-        return pickupTime;
-    }
+    @Column(name = "pickup_time")
+    private LocalDateTime pickupTime;
 
-    public void setPickupTime(Date pickupTime) {
-        this.pickupTime = pickupTime;
-    }
+    @Column(name = "booking_status")
+    private String bookingStatus;
 
-    public String getBookingType() {
-        return bookingType;
-    }
+    @Column(name = "booking_created_at")
+    private LocalDateTime createdAt;
 
-    public void setBookingType(String bookingType) {
-        this.bookingType = bookingType;
-    }
+    @Column(name = "booking_updated_at")
+    private LocalDateTime updatedAt;
 
-    public Ambulance getAmbulance() {
-        return ambulance;
-    }
+    // Constructors, Getters và Setters
+    public Booking() {}
 
-    public void setAmbulance(Ambulance ambulance) {
-        this.ambulance = ambulance;
-    }
+    // Getters and Setters for each field
 
-    // Getters và Setters
     public Integer getBookingId() {
         return bookingId;
     }
@@ -80,12 +55,12 @@ public class Booking {
         this.bookingId = bookingId;
     }
 
-    public Date getBookingDate() {
-        return bookingDate;
+    public Ambulance getAmbulance() {
+        return ambulance;
     }
 
-    public void setBookingDate(Date bookingDate) {
-        this.bookingDate = bookingDate;
+    public void setAmbulance(Ambulance ambulance) {
+        this.ambulance = ambulance;
     }
 
     public Patients getPatient() {
@@ -104,6 +79,30 @@ public class Booking {
         this.hospital = hospital;
     }
 
+    public String getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
+    }
+
+    public String getPickupAddress() {
+        return pickupAddress;
+    }
+
+    public void setPickupAddress(String pickupAddress) {
+        this.pickupAddress = pickupAddress;
+    }
+
+    public LocalDateTime getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(LocalDateTime pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
     public String getBookingStatus() {
         return bookingStatus;
     }
@@ -112,20 +111,19 @@ public class Booking {
         this.bookingStatus = bookingStatus;
     }
 
-    public String getBookingAddress() {
-        return bookingAddress;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setBookingAddress(String bookingAddress) {
-        this.bookingAddress = bookingAddress;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public String getBookingDetails() {
-        return bookingDetails;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setBookingDetails(String bookingDetails) {
-        this.bookingDetails = bookingDetails;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
-
 }

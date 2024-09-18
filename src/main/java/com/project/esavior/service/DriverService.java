@@ -7,7 +7,6 @@ import com.project.esavior.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class DriverService {
@@ -22,7 +21,7 @@ public class DriverService {
     }
 
     // Quản lý tình trạng xe cứu thương
-    public Driver updateDriverStatus(Integer  driverId, String status) {
+    public Driver updateDriverStatus(Integer driverId, String status) {
         // Kiểm tra trạng thái đầu vào
         if (!isValidStatus(status)) {
             throw new IllegalArgumentException("Invalid status");
@@ -30,7 +29,7 @@ public class DriverService {
 
         return driverRepository.findById(driverId)
                 .map(driver -> {
-                    driver.setStatus(status);
+                    driver.setStatus(status); // Đảm bảo Driver.java có phương thức setStatus
                     return driverRepository.save(driver);
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + driverId));

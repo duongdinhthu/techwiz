@@ -33,6 +33,12 @@ public class Driver {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "latitude")
+    private Double latitude; // Thêm trường này
+
+    @Column(name = "longitude")
+    private Double longitude;
+
     @Column(name = "driver_created_at")
     private LocalDateTime createdAt;
 
@@ -47,6 +53,22 @@ public class Driver {
     public Driver() {}
 
     // Getters and Setters for each field
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
 
     public String getEmail() {
         return email;

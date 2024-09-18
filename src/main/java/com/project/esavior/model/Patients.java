@@ -1,8 +1,8 @@
 package com.project.esavior.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,7 +14,7 @@ public class Patients {
     @Column(name = "patient_id")
     private Integer patientId;
 
-    @Column(name = "email", unique = true) // Đảm bảo trường này tồn tại
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "patient_name", nullable = false)
@@ -34,18 +34,73 @@ public class Patients {
 
     @OneToMany(mappedBy = "patient")
     private List<Booking> bookings;
+
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
+
     @Column(name = "patient_created_at")
     private LocalDateTime createdAt;
 
     @Column(name = "patient_updated_at")
     private LocalDateTime updatedAt;
 
+    // Các trường từ class 1
+    @Column(name = "patient_dob")
+    private Date patientDob; // Ngày sinh
+
+    @Column(name = "patient_gender")
+    private String patientGender; // Giới tính
+
+    @Column(name = "patient_code")
+    private String patientCode; // Mã bệnh nhân
+
+    @Column(name = "patient_img")
+    private String patientImg; // Đường dẫn ảnh bệnh nhân
+
     // Constructors, Getters và Setters
     public Patients() {
     }
 
+    // Getters và Setters cho các trường mới
+    public Date getPatientDob() {
+        return patientDob;
+    }
+
+    public void setPatientDob(Date patientDob) {
+        this.patientDob = patientDob;
+    }
+
+    public String getPatientGender() {
+        return patientGender;
+    }
+
+    public void setPatientGender(String patientGender) {
+        this.patientGender = patientGender;
+    }
+
+    public String getPatientCode() {
+        return patientCode;
+    }
+
+    public void setPatientCode(String patientCode) {
+        this.patientCode = patientCode;
+    }
+
+    public String getPatientImg() {
+        return patientImg;
+    }
+
+    public void setPatientImg(String patientImg) {
+        this.patientImg = patientImg;
+    }
+
+    // Getters và Setters cho các trường còn lại
     public String getEmail() {
         return email;
     }
@@ -53,10 +108,25 @@ public class Patients {
     public void setEmail(String email) {
         this.email = email;
     }
-// Getters and Setters for each field
 
     public Integer getPatientId() {
         return patientId;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public void setPatientId(Integer patientId) {

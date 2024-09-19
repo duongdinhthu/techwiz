@@ -1,5 +1,6 @@
 package com.project.esavior.controller;
 
+import com.project.esavior.dto.DriverDTO;
 import com.project.esavior.model.Booking;
 import com.project.esavior.model.Driver;
 import com.project.esavior.service.DriverService;
@@ -30,12 +31,33 @@ public class DriverController {
         Driver authenticatedDriver = driverService.authenticateDriver(driverEmail, driverPassword);
 
         if (authenticatedDriver != null) {
-            // Trả về toàn bộ đối tượng Driver
-            return ResponseEntity.ok(authenticatedDriver);
+            // Chuyển đổi Driver sang DriverDTO
+            DriverDTO driverDTO = convertToDTO(authenticatedDriver);
+
+            // Trả về đối tượng DriverDTO
+            return ResponseEntity.ok(driverDTO);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("success", false));
         }
 
+
+    }
+    public DriverDTO convertToDTO(Driver driver) {
+        DriverDTO dto = new DriverDTO();
+        dto.setDriverId(driver.getDriverId());
+        dto.setDriverName(driver.getDriverName());
+        dto.setEmail(driver.getEmail());
+        dto.setDriverPhone(driver.getDriverPhone());
+        dto.setLicenseNumber(driver.getLicenseNumber());
+        dto.setStatus(driver.getStatus());
+        dto.setLatitude(driver.getLatitude());
+        dto.setLongitude(driver.getLongitude());
+        if (driver.getHospital() != null) {
+            dto.setHospitalId(driver.getHospital().getHospitalId());
+        }
+        dto.setCreatedAt(driver.getCreatedAt());
+        dto.setUpdatedAt(driver.getUpdatedAt());
+        return dto;
     }
 
     @GetMapping("/all")

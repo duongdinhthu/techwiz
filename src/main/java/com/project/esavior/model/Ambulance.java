@@ -21,7 +21,6 @@ public class Ambulance {
 
     @OneToOne
     @JoinColumn(name = "driver_id")
-    @JsonIgnore
     private Driver driver;
 
     @Column(name = "ambulance_status", nullable = false)

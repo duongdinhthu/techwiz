@@ -1,6 +1,7 @@
 package com.project.esavior.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ public class Ambulance {
 
     @OneToOne
     @JoinColumn(name = "driver_id")
+    @JsonIgnore
     private Driver driver;
 
     @Column(name = "ambulance_status", nullable = false)

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patients")
@@ -58,5 +59,29 @@ public class PatientsController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    // Kiểm tra email bệnh nhân
+    @PostMapping("/check")
+    public ResponseEntity<Boolean> checkPatient(@RequestBody Patients patient) {
+        Optional<Patients> existingPatient = patientsService.findByEmail(patient.getEmail());
+        if (existingPatient.isPresent()) {
+            return new ResponseEntity<>(true, HttpStatus.OK); // Email đã tồn tại
+        }
+        return new ResponseEntity<>(false, HttpStatus.OK); // Email chưa tồn tại
+    }
+
+    // Cập nhật thông tin bệnh nhân nếu email đã tồn tại
+    @PutMapping("/update")
+    public ResponseEntity<String> updatePatient(@RequestBody Patients patient) {
+        Optional<Patients> existingPatient = patientsService.findByEmail(patient.getEmail());
+        if (existingPatient.isPresent()) {
+            Patients updatePatient = existingPatient.get();
+            updatePatient.setPatientName(patient.getPatientName());
+            updatePatient.setPhoneNumber(patient.getPhoneNumber());
+            patientsService.save(updatePatient);
+            return new ResponseEntity<>("Cập nhật thông tin thành công", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("Bệnh nhân không tồn tại", HttpStatus.NOT_FOUND);
     }
 }

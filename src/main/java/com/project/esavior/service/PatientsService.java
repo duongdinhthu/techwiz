@@ -17,40 +17,37 @@ public class PatientsService {
         this.patientsRepository = patientsRepository;
     }
 
-    // Đăng ký bệnh nhân mới
     public Patients registerPatient(Patients patient) {
-        // Lưu mật khẩu trực tiếp mà không mã hóa
         return patientsRepository.save(patient);
     }
 
-    // Xác thực đăng nhập
-    public Patients authenticatePatient(String email, String password) {
-        Patients patient = patientsRepository.findByEmail(email);
-        // So sánh mật khẩu trực tiếp mà không mã hóa
-        if (patient != null && patient.getPassword().equals(password)) {
-            return patient; // Xác thực thành công
+    public Optional<Patients> getPatientProfile(Integer id) {
+        return patientsRepository.findById(id);
+    }
+
+    public Patients updatePatientProfile(Integer id, Patients updatedPatient) {
+        Optional<Patients> patient = patientsRepository.findById(id);
+        if (patient.isPresent()) {
+            Patients existingPatient = patient.get();
+            existingPatient.setPatientName(updatedPatient.getPatientName());
+            existingPatient.setPhoneNumber(updatedPatient.getPhoneNumber());
+            existingPatient.setAddress(updatedPatient.getAddress());
+            existingPatient.setZipCode(updatedPatient.getZipCode());
+            return patientsRepository.save(existingPatient);
+        } else {
+            throw new IllegalArgumentException("Patient not found");
         }
-        return null; // Xác thực thất bại
     }
 
-    // Xem thông tin hồ sơ của bệnh nhân bằng ID
-    public Optional<Patients> getPatientProfile(Integer patientId) {
-        return patientsRepository.findById(patientId);
+    public Optional<Patients> findByEmail(String email) {
+        return patientsRepository.findByEmail(email);
     }
 
-    // Cập nhật thông tin hồ sơ của bệnh nhân
-    public Patients updatePatientProfile(Integer patientId, Patients updatedPatient) {
-        return patientsRepository.findById(patientId).map(patient -> {
-            // Cập nhật thông tin
-            patient.setPatientName(updatedPatient.getPatientName());
-            patient.setPhoneNumber(updatedPatient.getPhoneNumber());
-            patient.setAddress(updatedPatient.getAddress());
-            patient.setEmergencyContact(updatedPatient.getEmergencyContact());
-            // Nếu mật khẩu được cập nhật, lưu trực tiếp mà không mã hóa
-            if (updatedPatient.getPassword() != null && !updatedPatient.getPassword().isEmpty()) {
-                patient.setPassword(updatedPatient.getPassword());
-            }
-            return patientsRepository.save(patient);
-        }).orElseThrow(() -> new IllegalArgumentException("Patient not found with ID: " + patientId));
+    public void save(Patients patient) {
+        patientsRepository.save(patient);
+    }
+
+    public Patients authenticatePatient(String email, String password) {
+        return patientsRepository.findByEmailAndPassword(email, password).orElse(null);
     }
 }

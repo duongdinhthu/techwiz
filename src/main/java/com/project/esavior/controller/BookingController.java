@@ -1,12 +1,15 @@
 package com.project.esavior.controller;
 
 import com.project.esavior.model.Booking;
+import com.project.esavior.model.Patients;
 import com.project.esavior.service.BookingService;
+import com.project.esavior.service.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -14,10 +17,34 @@ import java.util.List;
 public class BookingController {
 
     private final BookingService bookingService;
+    private final PatientsService patientsService;
 
     @Autowired
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingService bookingService, PatientsService patientsService) {
         this.bookingService = bookingService;
+        this.patientsService = patientsService;
+    }
+    @PostMapping("/emergency")
+    public ResponseEntity<Booking> createEmergencyBooking(@RequestBody Booking bookingRequest) {
+        // Tìm bệnh nhân theo email
+        Patients patient = patientsService.findByEmail(bookingRequest.getPatient().getEmail())
+                .orElse(null);
+
+        if (patient == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Tạo đối tượng Booking mới
+        Booking newBooking = new Booking();
+        newBooking.setPatient(patient);
+        newBooking.setBookingType("Khẩn cấp");
+        newBooking.setPickupAddress(bookingRequest.getPickupAddress());
+        newBooking.setPickupTime(LocalDateTime.now()); // Thời gian đặt hiện tại
+        newBooking.setBookingStatus("Pending"); // Trạng thái ban đầu
+
+        // Lưu đặt chỗ mới
+        Booking savedBooking = bookingService.createBooking(newBooking);
+        return new ResponseEntity<>(savedBooking, HttpStatus.CREATED);
     }
 
     // Tạo đặt chỗ mới

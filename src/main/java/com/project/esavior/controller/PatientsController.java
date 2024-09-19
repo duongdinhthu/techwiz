@@ -64,12 +64,16 @@ public class PatientsController {
     // Kiểm tra email bệnh nhân
     @PostMapping("/check")
     public ResponseEntity<Boolean> checkPatient(@RequestBody Patients patient) {
+        System.out.println("Checking email: " + patient.getEmail());
         Optional<Patients> existingPatient = patientsService.findByEmail(patient.getEmail());
         if (existingPatient.isPresent()) {
+            System.out.println("Email found: " + existingPatient.get().getEmail());
             return new ResponseEntity<>(true, HttpStatus.OK); // Email đã tồn tại
         }
+        System.out.println("Email not found");
         return new ResponseEntity<>(false, HttpStatus.OK); // Email chưa tồn tại
     }
+
 
     // Cập nhật thông tin bệnh nhân nếu email đã tồn tại
     @PutMapping("/update")

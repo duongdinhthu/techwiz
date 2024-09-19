@@ -41,6 +41,7 @@ public class Ambulance {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "ambulance")
+    @JsonIgnore
     private List<Booking> bookings;
 
     // Constructors, Getters và Setters

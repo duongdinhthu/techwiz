@@ -22,4 +22,5 @@ public class HospitalController {
         List<Hospital> hospitals = hospitalService.getAllHospitals();
         return ResponseEntity.ok(hospitals);
     }
+
 }

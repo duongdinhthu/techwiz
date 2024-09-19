@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -34,9 +35,13 @@ public class DriverController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("success", false));
         }
+
     }
 
-
+    @GetMapping("/all")
+    public List<Driver> getAllDrivers() {
+        return driverService.getAllDrivers();
+    }
 
     // Quản lý tình trạng xe cứu thương
     @PutMapping("/{driverId}/status")

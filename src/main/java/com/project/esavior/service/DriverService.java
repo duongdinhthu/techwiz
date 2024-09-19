@@ -52,4 +52,7 @@ public class DriverService {
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Booking not found with ID: " + bookingId));
     }
+    public List<Driver> getAllDrivers() {
+        return driverRepository.findAll();
+    }
 }

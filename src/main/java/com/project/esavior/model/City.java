@@ -18,7 +18,6 @@ public class City {
     private String cityName;
 
     @OneToMany(mappedBy = "city")
-    @JsonManagedReference // Hoặc sử dụng @JsonIgnore để bỏ qua
     private List<Hospital> hospitals;
 
     @Column(name = "city_created_at")

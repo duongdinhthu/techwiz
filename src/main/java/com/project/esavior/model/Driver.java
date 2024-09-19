@@ -31,7 +31,6 @@ public class Driver {
     private String licenseNumber;
 
     @OneToOne(mappedBy = "driver")
-    @JsonIgnore // Hoặc sử dụng @JsonIgnore để bỏ qua
     private Ambulance ambulance;
 
     @Column(name = "status")
@@ -51,9 +50,8 @@ public class Driver {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
-    @JsonBackReference // Hoặc sử dụng @JsonIgnore để bỏ qua
+    @JsonIgnore
     private Hospital hospital;
-
     // Constructors, Getters và Setters
     public Driver() {}
 

@@ -21,6 +21,7 @@ public class Ambulance {
 
     @OneToOne
     @JoinColumn(name = "driver_id")
+    @JsonIgnore
     private Driver driver;
 
     @Column(name = "ambulance_status", nullable = false)
@@ -31,9 +32,7 @@ public class Ambulance {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
-    @JsonBackReference // Hoặc sử dụng @JsonIgnore để bỏ qua
-    private Hospital hospital;
-
+    @JsonIgnore     private Hospital hospital;
     @Column(name = "ambulance_created_at")
     private LocalDateTime createdAt;
 
@@ -41,7 +40,6 @@ public class Ambulance {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "ambulance")
-    @JsonManagedReference // Hoặc sử dụng @JsonIgnore để bỏ qua
     private List<Booking> bookings;
 
     // Constructors, Getters và Setters

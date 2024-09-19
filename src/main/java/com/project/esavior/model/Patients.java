@@ -34,7 +34,6 @@ public class Patients {
     private String emergencyContact;
 
     @OneToMany(mappedBy = "patient")
-    @JsonManagedReference // Hoặc sử dụng @JsonIgnore để bỏ qua
     private List<Booking> bookings;
 
     @Column(name = "password", nullable = false)

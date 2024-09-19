@@ -1,6 +1,7 @@
 package com.project.esavior.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -15,17 +16,16 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "ambulance_id")
-    @JsonBackReference // Hoặc sử dụng @JsonIgnore để bỏ qua
+    @JsonIgnore
     private Ambulance ambulance;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
-    @JsonBackReference // Hoặc sử dụng @JsonIgnore để bỏ qua
-    private Patients patient;
+    @JsonIgnore     private Patients patient;
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
-    @JsonBackReference // Hoặc sử dụng @JsonIgnore để bỏ qua
+    @JsonIgnore
     private Hospital hospital;
 
     @Column(name = "booking_type")

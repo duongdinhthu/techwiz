@@ -1,5 +1,6 @@
 package com.project.esavior.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ public class City {
     private String cityName;
 
     @OneToMany(mappedBy = "city")
+    @JsonManagedReference // Hoặc sử dụng @JsonIgnore để bỏ qua
     private List<Hospital> hospitals;
 
     @Column(name = "city_created_at")

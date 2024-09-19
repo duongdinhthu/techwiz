@@ -1,5 +1,7 @@
 package com.project.esavior.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -28,6 +30,7 @@ public class Driver {
     private String licenseNumber;
 
     @OneToOne(mappedBy = "driver")
+    @JsonManagedReference // Hoặc sử dụng @JsonIgnore để bỏ qua
     private Ambulance ambulance;
 
     @Column(name = "status")
@@ -47,6 +50,7 @@ public class Driver {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
+    @JsonBackReference // Hoặc sử dụng @JsonIgnore để bỏ qua
     private Hospital hospital;
 
     // Constructors, Getters và Setters

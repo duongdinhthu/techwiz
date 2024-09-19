@@ -29,16 +29,8 @@ public class DriverController {
         Driver authenticatedDriver = driverService.authenticateDriver(driverEmail, driverPassword);
 
         if (authenticatedDriver != null) {
-            // Chỉ trả về các trường cần thiết
-            Map<String, Object> response = new HashMap<>();
-            response.put("driverId", authenticatedDriver.getDriverId());
-            response.put("driverName", authenticatedDriver.getDriverName());
-            response.put("email", authenticatedDriver.getEmail());
-            response.put("driverPhone", authenticatedDriver.getDriverPhone());
-            response.put("latitude", authenticatedDriver.getLatitude());
-            response.put("longitude", authenticatedDriver.getLongitude());
-            // Thêm các trường cần thiết khác nếu có
-            return ResponseEntity.ok(response);
+            // Trả về toàn bộ đối tượng Driver
+            return ResponseEntity.ok(authenticatedDriver);
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("success", false));
         }

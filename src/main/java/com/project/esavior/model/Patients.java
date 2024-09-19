@@ -1,5 +1,6 @@
 package com.project.esavior.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -33,6 +34,7 @@ public class Patients {
     private String emergencyContact;
 
     @OneToMany(mappedBy = "patient")
+    @JsonManagedReference // Hoặc sử dụng @JsonIgnore để bỏ qua
     private List<Booking> bookings;
 
     @Column(name = "password", nullable = false)

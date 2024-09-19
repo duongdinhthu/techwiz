@@ -50,7 +50,7 @@ public class Driver {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
-    @JsonIgnore
+
     private Hospital hospital;
     // Constructors, Getters và Setters
     public Driver() {}
@@ -159,5 +159,24 @@ public class Driver {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Driver{" +
+                "driverId=" + driverId +
+                ", driverName='" + driverName + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", driverPhone='" + driverPhone + '\'' +
+                ", licenseNumber='" + licenseNumber + '\'' +
+                ", ambulance=" + ambulance +
+                ", status='" + status + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", hospital=" + hospital +
+                '}';
     }
 }

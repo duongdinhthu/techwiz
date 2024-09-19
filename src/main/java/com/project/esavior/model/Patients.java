@@ -36,7 +36,7 @@ public class Patients {
     @OneToMany(mappedBy = "patient")
     private List<Booking> bookings;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "patient_password", nullable = false)
     private String password;
 
     @Column(name = "latitude")
@@ -204,5 +204,27 @@ public class Patients {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Patients{" +
+                "patientId=" + patientId +
+                ", email='" + email + '\'' +
+                ", patientName='" + patientName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", address='" + address + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", emergencyContact='" + emergencyContact + '\'' +
+                ", password='" + password + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", patientDob=" + patientDob +
+                ", patientGender='" + patientGender + '\'' +
+                ", patientCode='" + patientCode + '\'' +
+                ", patientImg='" + patientImg + '\'' +
+                '}';
     }
 }

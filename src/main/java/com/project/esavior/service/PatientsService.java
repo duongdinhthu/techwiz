@@ -42,6 +42,9 @@ public class PatientsService {
     public Optional<Patients> findByEmail(String email) {
         return patientsRepository.findByEmail(email);
     }
+    public Optional<Patients> findById(Integer id) {
+        return patientsRepository.findById(id);
+    }
 
     public void save(Patients patient) {
         patientsRepository.save(patient);
@@ -50,4 +53,5 @@ public class PatientsService {
     public Patients authenticatePatient(String email, String password) {
         return patientsRepository.findByEmailAndPassword(email, password).orElse(null);
     }
+
 }

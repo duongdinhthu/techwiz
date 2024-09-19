@@ -32,7 +32,8 @@ public class Ambulance {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
-    @JsonIgnore     private Hospital hospital;
+    private Hospital hospital;
+
     @Column(name = "ambulance_created_at")
     private LocalDateTime createdAt;
 
@@ -117,6 +118,20 @@ public class Ambulance {
         this.bookings = bookings;
     }
 
+    @Override
+    public String toString() {
+        return "Ambulance{" +
+                "ambulanceId=" + ambulanceId +
+                ", ambulanceNumber='" + ambulanceNumber + '\'' +
+                ", driver=" + driver +
+                ", ambulanceStatus='" + ambulanceStatus + '\'' +
+                ", ambulanceType='" + ambulanceType + '\'' +
+                ", hospital=" + hospital +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", bookings=" + bookings +
+                '}';
+    }
 
-    // Getters and Setters for each field
+// Getters and Setters for each field
 }

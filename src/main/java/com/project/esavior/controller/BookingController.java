@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/bookings")
@@ -26,26 +27,40 @@ public class BookingController {
     }
     @PostMapping("/emergency")
     public ResponseEntity<Booking> createEmergencyBooking(@RequestBody Booking bookingRequest) {
-        // Tìm bệnh nhân theo email
-        Patients patient = patientsService.findByEmail(bookingRequest.getPatient().getEmail())
-                .orElse(null);
+        // Debug: In ra JSON request để kiểm tra
+        System.out.println("Booking Request: " + bookingRequest);
+        System.out.println(bookingRequest.getPatient().getEmail());
 
-        if (patient == null) {
+        // Kiểm tra xem đối tượng patient có null không
+        if (bookingRequest.getPatient() == null || bookingRequest.getPatient().getEmail() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Yêu cầu không hợp lệ
+        }
+
+        // Tìm bệnh nhân theo email
+        Optional<Patients> patientOpt = patientsService.findByEmail(bookingRequest.getPatient().getEmail());
+        if (patientOpt.isPresent()) {
+            System.out.println("Patient found: " + patientOpt.get());
+        } else {
+            System.out.println("Patient not found with email: " + bookingRequest.getPatient().getEmail());
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         // Tạo đối tượng Booking mới
         Booking newBooking = new Booking();
-        newBooking.setPatient(patient);
-        newBooking.setBookingType("Khẩn cấp");
+        newBooking.setPatient(patientOpt.get()); // Lấy đối tượng Patients từ Optional
+        newBooking.setBookingType("Provide");
         newBooking.setPickupAddress(bookingRequest.getPickupAddress());
         newBooking.setPickupTime(LocalDateTime.now()); // Thời gian đặt hiện tại
-        newBooking.setBookingStatus("Pending"); // Trạng thái ban đầu
+        newBooking.setBookingStatus("Pending");
+        newBooking.setLatitude(bookingRequest.getLatitude());
+        newBooking.setLongitude(bookingRequest.getLongitude());
 
         // Lưu đặt chỗ mới
         Booking savedBooking = bookingService.createBooking(newBooking);
-        return new ResponseEntity<>(savedBooking, HttpStatus.CREATED);
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
+
+
 
     // Tạo đặt chỗ mới
     @PostMapping

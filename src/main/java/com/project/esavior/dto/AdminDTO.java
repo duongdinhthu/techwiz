@@ -1,40 +1,17 @@
-package com.project.esavior.model;
+package com.project.esavior.dto;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "admins")
-public class Admin {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "admin_id")
+public class AdminDTO {
     private Integer adminId;
-
-    @Column(name = "admin_name", nullable = false)
     private String adminName;
-
-    @Column(name = "admin_email", nullable = false, unique = true)
     private String adminEmail;
-
-    @Column(name = "admin_password", nullable = false)
-    private String adminPassword;
-
-    @Column(name = "admin_phone", nullable = false)
     private String adminPhone;
-
-    @Column(name = "admin_address")
     private String adminAddress;
-
-    @Column(name = "admin_created_at")
     private LocalDateTime createdAt;
-
-    @Column(name = "admin_updated_at")
     private LocalDateTime updatedAt;
 
-    // Constructors, Getters và Setters
-    public Admin() {}
-
+    // Getters và Setters
     public Integer getAdminId() {
         return adminId;
     }
@@ -57,14 +34,6 @@ public class Admin {
 
     public void setAdminEmail(String adminEmail) {
         this.adminEmail = adminEmail;
-    }
-
-    public String getAdminPassword() {
-        return adminPassword;
-    }
-
-    public void setAdminPassword(String adminPassword) {
-        this.adminPassword = adminPassword;
     }
 
     public String getAdminPhone() {
@@ -97,21 +66,5 @@ public class Admin {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    // Getters and Setters for each field
-
-    @Override
-    public String toString() {
-        return "Admin{" +
-                "adminId=" + adminId +
-                ", adminName='" + adminName + '\'' +
-                ", adminEmail='" + adminEmail + '\'' +
-                ", adminPassword='" + adminPassword + '\'' +
-                ", adminPhone='" + adminPhone + '\'' +
-                ", adminAddress='" + adminAddress + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
     }
 }

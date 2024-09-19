@@ -24,7 +24,6 @@ public class Hospital {
 
     @ManyToOne
     @JoinColumn(name = "city_id")
-    @JsonIgnore
     private City city;
 
     @Column(name = "phone_number")
@@ -117,5 +116,20 @@ public class Hospital {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Hospital{" +
+                "hospitalId=" + hospitalId +
+                ", hospitalName='" + hospitalName + '\'' +
+                ", address='" + address + '\'' +
+                ", city=" + city +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", ambulances=" + ambulances +
+                ", bookings=" + bookings +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

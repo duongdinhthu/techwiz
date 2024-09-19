@@ -16,17 +16,21 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "ambulance_id")
-    @JsonIgnore
     private Ambulance ambulance;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
-    @JsonIgnore     private Patients patient;
+    private Patients patient;
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
-    @JsonIgnore
     private Hospital hospital;
+
+    @Column(name = "latitude")
+    private Double latitude; // Thêm trường này
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @Column(name = "booking_type")
     private String bookingType;
@@ -87,6 +91,22 @@ public class Booking {
         return bookingType;
     }
 
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
     public void setBookingType(String bookingType) {
         this.bookingType = bookingType;
     }
@@ -129,5 +149,20 @@ public class Booking {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Booking{" +
+                "bookingId=" + bookingId +
+                ", ambulance=" + ambulance +
+                ", hospital=" + hospital +
+                ", bookingType='" + bookingType + '\'' +
+                ", pickupAddress='" + pickupAddress + '\'' +
+                ", pickupTime=" + pickupTime +
+                ", bookingStatus='" + bookingStatus + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
     }
 }

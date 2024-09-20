@@ -98,15 +98,26 @@ public class DriverController {
         }
     }
     @PostMapping("/nearest")
-    public ResponseEntity<List<Driver>> findNearestDrivers(@RequestBody Map<String, Double> location) {
+    public ResponseEntity<List<DriverDTO>> findNearestDrivers(@RequestBody Map<String, Double> location) {
         double latitude = location.get("latitude");
         double longitude = location.get("longitude");
+
+        // Tìm các tài xế gần nhất
         List<Driver> nearestDrivers = driverService.findNearestDrivers(latitude, longitude);
-        if (!nearestDrivers.isEmpty()) {
-            return ResponseEntity.ok(nearestDrivers);
-        } else {
+
+        // Nếu không có tài xế gần nhất
+        if (nearestDrivers.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+
+        // Chuyển đổi danh sách Driver thành danh sách DriverDTO với chỉ tên và số điện thoại
+        List<DriverDTO> driverDTOs = nearestDrivers.stream()
+                .map(driver -> new DriverDTO(driver.getDriverName(), driver.getDriverPhone()))
+                .toList();
+
+        // Trả về danh sách DTO
+        return ResponseEntity.ok(driverDTOs);
     }
+
 
 }

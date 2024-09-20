@@ -15,6 +15,14 @@ public class DriverDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public DriverDTO() {
+    }
+
+    public DriverDTO(String driverName, String driverPhone) {
+        this.driverName = driverName;
+        this.driverPhone = driverPhone;
+    }
+
     // Getters và Setters
     public Integer getDriverId() {
         return driverId;

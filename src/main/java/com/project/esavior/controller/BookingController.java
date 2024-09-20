@@ -62,6 +62,64 @@ public class BookingController {
         Booking savedBooking = bookingService.createBooking(newBooking);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
+    @PostMapping("/non-emergency")
+    public ResponseEntity<Booking> createNonEmergencyBooking(@RequestBody Booking bookingRequest) {
+        // Debug: In ra JSON request để kiểm tra
+        System.out.println("Non-Emergency Booking Request: " + bookingRequest);
+        System.out.println("Patient Email: " + bookingRequest.getPatient().getEmail());
+
+        // Kiểm tra xem đối tượng patient có null không
+        if (bookingRequest.getPatient() == null || bookingRequest.getPatient().getEmail() == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Yêu cầu không hợp lệ
+        }
+
+        // Tìm bệnh nhân theo email
+        Optional<Patients> patientOpt = patientsService.findByEmail(bookingRequest.getPatient().getEmail());
+        if (patientOpt.isPresent()) {
+            System.out.println("Patient found: " + patientOpt.get());
+        } else {
+            System.out.println("Patient not found with email: " + bookingRequest.getPatient().getEmail());
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Tạo đối tượng Booking mới
+        Booking newBooking = new Booking();
+        newBooking.setPatient(patientOpt.get()); // Lấy đối tượng Patients từ Optional
+
+        // Kiểm tra thông tin địa chỉ đón (pickupAddress) và mã ZIP
+        if (bookingRequest.getPickupAddress() != null && !bookingRequest.getPickupAddress().isEmpty()) {
+            newBooking.setPickupAddress(bookingRequest.getPickupAddress());
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Địa chỉ đón không hợp lệ
+        }
+
+        if (bookingRequest.getZipCode() != null && !bookingRequest.getZipCode().isEmpty()) {
+            newBooking.setZipCode(bookingRequest.getZipCode());
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Mã ZIP không hợp lệ
+        }
+
+        // Đặt loại đặt chỗ là không khẩn cấp (Non-Emergency)
+        newBooking.setBookingType("Non-Emergency");
+
+        // Đặt thời gian đón từ request
+        if (bookingRequest.getPickupTime() != null) {
+            newBooking.setPickupTime(bookingRequest.getPickupTime());
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Thời gian đón không hợp lệ
+        }
+
+        newBooking.setBookingStatus("Pending");
+        newBooking.setLatitude(bookingRequest.getLatitude());
+        newBooking.setLongitude(bookingRequest.getLongitude());
+        newBooking.setDestinationLatitude(bookingRequest.getDestinationLatitude());
+        newBooking.setDestinationLongitude(bookingRequest.getDestinationLongitude());
+        newBooking.setCost(bookingRequest.getCost());
+
+        // Lưu thông tin đặt chỗ
+        Booking savedBooking = bookingService.createBooking(newBooking);
+        return new ResponseEntity<>(savedBooking, HttpStatus.CREATED);
+    }
 
     // Tạo đặt chỗ mới
     @PostMapping

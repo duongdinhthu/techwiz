@@ -58,6 +58,9 @@ public class Booking {
 
     @Column(name = "cost")
     private Double cost;
+
+    @Column(name = "zip_code")  // Thêm cột zipCode
+    private String zipCode;
     // Constructors, Getters và Setters
     public Booking() {}
 
@@ -65,6 +68,14 @@ public class Booking {
 
     public Double getCost() {
         return cost;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public void setCost(Double cost) {

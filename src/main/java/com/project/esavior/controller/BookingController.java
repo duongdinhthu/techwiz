@@ -153,7 +153,7 @@ public class BookingController {
         double distance = calculateDistance(startLatitude, startLongitude, destinationLatitude, destinationLongitude);
 
         // Giả sử mỗi km có giá là 1 USD
-        double costPerKmUSD = 1.0; // Chi phí 1 USD cho mỗi km
+        double costPerKmUSD = 1.5; // Chi phí 1 USD cho mỗi km
         double costInUSD = distance * costPerKmUSD;
 
         // Tạo response với chi phí

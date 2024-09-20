@@ -32,6 +32,12 @@ public class Booking {
     @Column(name = "longitude")
     private Double longitude;
 
+    @Column(name = "destination_latitude")
+    private Double destinationLatitude;
+
+    @Column(name = "destination_longitude")
+    private Double destinationLongitude;
+
     @Column(name = "booking_type")
     private String bookingType;
 
@@ -54,6 +60,22 @@ public class Booking {
     public Booking() {}
 
     // Getters and Setters for each field
+
+    public Double getDestinationLatitude() {
+        return destinationLatitude;
+    }
+
+    public void setDestinationLatitude(Double destinationLatitude) {
+        this.destinationLatitude = destinationLatitude;
+    }
+
+    public Double getDestinationLongitude() {
+        return destinationLongitude;
+    }
+
+    public void setDestinationLongitude(Double destinationLongitude) {
+        this.destinationLongitude = destinationLongitude;
+    }
 
     public Integer getBookingId() {
         return bookingId;

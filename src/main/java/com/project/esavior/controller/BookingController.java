@@ -54,7 +54,8 @@ public class BookingController {
         newBooking.setBookingStatus("Pending");
         newBooking.setLatitude(bookingRequest.getLatitude());
         newBooking.setLongitude(bookingRequest.getLongitude());
-
+        newBooking.setDestinationLatitude(bookingRequest.getDestinationLatitude());
+        newBooking.setDestinationLongitude(bookingRequest.getDestinationLongitude());
         // Lưu đặt chỗ mới
         Booking savedBooking = bookingService.createBooking(newBooking);
         return new ResponseEntity<>( HttpStatus.CREATED);

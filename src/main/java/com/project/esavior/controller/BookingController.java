@@ -69,7 +69,7 @@ public class BookingController {
         System.out.println("Patient Email: " + bookingRequest.getPatient().getEmail());
 
         // Kiểm tra xem đối tượng patient có null không
-        if (bookingRequest.getPatient() == null || bookingRequest.getPatient().getEmail() == null) {
+        if (bookingRequest.getPatient() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Yêu cầu không hợp lệ
         }
 

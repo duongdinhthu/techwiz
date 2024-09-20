@@ -97,4 +97,13 @@ public class DriverController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+    @PostMapping("/nearest")
+    public ResponseEntity<List<Driver>> findNearestDrivers(@RequestParam double latitude, @RequestParam double longitude) {
+        List<Driver> nearestDrivers = driverService.findNearestDrivers(latitude, longitude);
+        if (!nearestDrivers.isEmpty()) {
+            return ResponseEntity.ok(nearestDrivers);
+        } else {
+            return ResponseEntity.noContent().build(); // Không có tài xế gần nhất
+        }
+    }
 }

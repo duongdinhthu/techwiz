@@ -55,4 +55,15 @@ public class DriverService {
     public List<Driver> getAllDrivers() {
         return driverRepository.findAll();
     }
+    private static final double RADIUS_DEGREE = 0.1; // Khoảng 5-6 km
+
+    public List<Driver> findNearestDrivers(double customerLatitude, double customerLongitude) {
+        double minLatitude = customerLatitude - RADIUS_DEGREE;
+        double maxLatitude = customerLatitude + RADIUS_DEGREE;
+        double minLongitude = customerLongitude - RADIUS_DEGREE;
+        double maxLongitude = customerLongitude + RADIUS_DEGREE;
+
+        // Gọi hàm tìm tài xế từ repository
+        return driverRepository.findDriversInRange(minLatitude, maxLatitude, minLongitude, maxLongitude);
+    }
 }

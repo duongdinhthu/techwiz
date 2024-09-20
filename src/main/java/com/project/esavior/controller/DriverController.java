@@ -98,12 +98,15 @@ public class DriverController {
         }
     }
     @PostMapping("/nearest")
-    public ResponseEntity<List<Driver>> findNearestDrivers(@RequestParam double latitude, @RequestParam double longitude) {
+    public ResponseEntity<List<Driver>> findNearestDrivers(@RequestBody Map<String, Double> location) {
+        double latitude = location.get("latitude");
+        double longitude = location.get("longitude");
         List<Driver> nearestDrivers = driverService.findNearestDrivers(latitude, longitude);
         if (!nearestDrivers.isEmpty()) {
             return ResponseEntity.ok(nearestDrivers);
         } else {
-            return ResponseEntity.noContent().build(); // Không có tài xế gần nhất
+            return ResponseEntity.noContent().build();
         }
     }
+
 }

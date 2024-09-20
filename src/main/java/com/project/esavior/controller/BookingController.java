@@ -58,7 +58,7 @@ public class BookingController {
         newBooking.setLongitude(bookingRequest.getLongitude());
         newBooking.setDestinationLatitude(bookingRequest.getDestinationLatitude());
         newBooking.setDestinationLongitude(bookingRequest.getDestinationLongitude());
-        // Lưu đặt chỗ mới
+        newBooking.setCost(bookingRequest.getCost());
         Booking savedBooking = bookingService.createBooking(newBooking);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
@@ -84,7 +84,7 @@ public class BookingController {
     }
 
     // Tìm kiếm chi tiết đặt chỗ theo thành phố
-    @GetMapping("/city")
+    @GetMapping("/city") .
     public List<Booking> getBookingsByCityName(@RequestParam String cityName) {
         return bookingService.findByCityName(cityName);
     }

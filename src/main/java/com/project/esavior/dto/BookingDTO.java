@@ -11,9 +11,18 @@ public class BookingDTO {
     private String bookingStatus;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Double cost;
 
     public Integer getBookingId() {
         return bookingId;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
     }
 
     public void setBookingId(Integer bookingId) {

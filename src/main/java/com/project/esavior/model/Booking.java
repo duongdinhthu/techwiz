@@ -56,10 +56,20 @@ public class Booking {
     @Column(name = "booking_updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "cost")
+    private Double cost;
     // Constructors, Getters và Setters
     public Booking() {}
 
     // Getters and Setters for each field
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
 
     public Double getDestinationLatitude() {
         return destinationLatitude;

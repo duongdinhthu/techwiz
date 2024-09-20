@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -60,8 +62,6 @@ public class BookingController {
         Booking savedBooking = bookingService.createBooking(newBooking);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
-
-
 
     // Tạo đặt chỗ mới
     @PostMapping
@@ -129,5 +129,38 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Bán kính Trái Đất tính bằng km
+        double latDistance = Math.toRadians(lat2 - lat1);
+        double lonDistance = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(latDistance / 2) * Math.sin(latDistance / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(lonDistance / 2) * Math.sin(lonDistance / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c; // khoảng cách tính bằng km
+        return distance;
+    }
+    @PostMapping("/calculate-cost")
+    public ResponseEntity<Map<String, Object>> calculateCost(@RequestBody Map<String, Object> locationData) {
+        // Lấy tọa độ từ request
+        double startLatitude = (double) locationData.get("startLatitude");
+        double startLongitude = (double) locationData.get("startLongitude");
+        double destinationLatitude = (double) locationData.get("destinationLatitude");
+        double destinationLongitude = (double) locationData.get("destinationLongitude");
+
+        // Tính khoảng cách giữa điểm đi và điểm đến
+        double distance = calculateDistance(startLatitude, startLongitude, destinationLatitude, destinationLongitude);
+
+        // Giả sử mỗi km có giá là 10000 VND
+        double costPerKm = 1;
+        double totalCost = distance * costPerKm;
+
+        // Tạo response với chi phí
+        Map<String, Object> response = new HashMap<>();
+        response.put("distance", distance);
+        response.put("cost", totalCost);
+
+        return ResponseEntity.ok(response);
     }
 }

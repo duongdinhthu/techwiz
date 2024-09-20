@@ -84,7 +84,7 @@ public class BookingController {
     }
 
     // Tìm kiếm chi tiết đặt chỗ theo thành phố
-    @GetMapping("/city") .
+    @GetMapping("/city")
     public List<Booking> getBookingsByCityName(@RequestParam String cityName) {
         return bookingService.findByCityName(cityName);
     }

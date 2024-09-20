@@ -44,6 +44,10 @@ public class LocationController {
     @PostMapping("/nearest-driver")
     public ResponseEntity<NearestDriverResponse> findNearestDriver(@RequestBody NearestDriverRequest request) {
         NearestDriverResponse response = locationService.findNearestDriver(request);
-        return ResponseEntity.ok(response);
+        if (response != null) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }

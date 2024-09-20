@@ -41,6 +41,9 @@ public class Hospital {
     @Column(name = "hospital_updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "zip_code")
+    private String zipCode;
+
     // Constructors, Getters và Setters
     public Hospital() {}
 
@@ -48,6 +51,14 @@ public class Hospital {
 
     public Integer getHospitalId() {
         return hospitalId;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public void setHospitalId(Integer hospitalId) {

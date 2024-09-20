@@ -1,5 +1,6 @@
 package com.project.esavior.controller;
 
+import com.project.esavior.dto.HospitalDTO;
 import com.project.esavior.model.Hospital;
 import com.project.esavior.service.HospitalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,25 @@ public class HospitalController {
     private HospitalService hospitalService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Hospital>> getAllHospitals() {
+    public ResponseEntity<List<HospitalDTO>> getAllHospitals() {
         List<Hospital> hospitals = hospitalService.getAllHospitals();
-        return ResponseEntity.ok(hospitals);
+
+        // Chuyển đổi danh sách Hospital thành HospitalDTO
+        List<HospitalDTO> hospitalDTOs = hospitals.stream().map(hospital -> {
+            HospitalDTO dto = new HospitalDTO();
+            dto.setHospitalId(hospital.getHospitalId());
+            dto.setHospitalName(hospital.getHospitalName());
+            dto.setAddress(hospital.getAddress());
+            dto.setPhoneNumber(hospital.getPhoneNumber());
+            dto.setCityId(hospital.getCity().getCityId()); // Chỉ lấy City ID để tránh vòng lặp
+            dto.setCreatedAt(hospital.getCreatedAt());
+            dto.setUpdatedAt(hospital.getUpdatedAt());
+            dto.setZipCode(hospital.getZipCode());
+            return dto;
+        }).toList();
+
+        return ResponseEntity.ok(hospitalDTOs);
     }
+
 
 }

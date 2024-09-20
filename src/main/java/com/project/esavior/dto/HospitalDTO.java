@@ -10,10 +10,18 @@ public class HospitalDTO {
     private Integer cityId; // Chỉ bao gồm ID của City để tránh vòng lặp
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
+    private String zipCode;
     // Getters và Setters
     public Integer getHospitalId() {
         return hospitalId;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public void setHospitalId(Integer hospitalId) {

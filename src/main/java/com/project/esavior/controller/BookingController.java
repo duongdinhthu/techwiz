@@ -1,5 +1,6 @@
 package com.project.esavior.controller;
 
+import com.project.esavior.dto.BookingDTO;
 import com.project.esavior.model.Booking;
 import com.project.esavior.model.Patients;
 import com.project.esavior.service.BookingService;
@@ -63,7 +64,7 @@ public class BookingController {
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
     @PostMapping("/non-emergency")
-    public ResponseEntity<Booking> createNonEmergencyBooking(@RequestBody Booking bookingRequest) {
+    public ResponseEntity<BookingDTO> createNonEmergencyBooking(@RequestBody Booking bookingRequest) {
         // Debug: In ra JSON request để kiểm tra
         System.out.println("Non-Emergency Booking Request: " + bookingRequest);
         System.out.println("Patient Email: " + bookingRequest.getPatient().getEmail());
@@ -94,7 +95,24 @@ public class BookingController {
 
         // Lưu thông tin đặt chỗ
         Booking savedBooking = bookingService.createBooking(newBooking);
-        return new ResponseEntity<>(savedBooking, HttpStatus.CREATED);
+        BookingDTO bookingDTO = convertToDTO(savedBooking);
+
+        return new ResponseEntity<>(bookingDTO, HttpStatus.CREATED);
+    }
+    public BookingDTO convertToDTO(Booking booking) {
+        BookingDTO bookingDTO = new BookingDTO();
+        bookingDTO.setBookingId(booking.getBookingId());
+        bookingDTO.setPatientId(booking.getPatient().getPatientId());  // Lấy patientId từ đối tượng Patient
+        bookingDTO.setPickupAddress(booking.getPickupAddress());
+        bookingDTO.setPickupTime(booking.getPickupTime());
+        bookingDTO.setBookingStatus(booking.getBookingStatus());
+        bookingDTO.setLatitude(booking.getLatitude());
+        bookingDTO.setLongitude(booking.getLongitude());
+        bookingDTO.setDestinationLatitude(booking.getDestinationLatitude());
+        bookingDTO.setDestinationLongitude(booking.getDestinationLongitude());
+        bookingDTO.setCost(booking.getCost());
+        bookingDTO.setBookingType(booking.getBookingType());
+        return bookingDTO;
     }
 
     // Tạo đặt chỗ mới

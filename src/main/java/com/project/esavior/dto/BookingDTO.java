@@ -4,45 +4,32 @@ import java.time.LocalDateTime;
 
 public class BookingDTO {
     private Integer bookingId;
-    private String email; // Chứa email của bệnh nhân để tìm kiếm
-    private String bookingType;
+    private Integer patientId;  // Thêm patientId vào DTO
     private String pickupAddress;
     private LocalDateTime pickupTime;
     private String bookingStatus;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private Double cost;
+    private double latitude;
+    private double longitude;
+    private double destinationLatitude;
+    private double destinationLongitude;
+    private double cost;
+    private String bookingType;
+
 
     public Integer getBookingId() {
         return bookingId;
-    }
-
-    public Double getCost() {
-        return cost;
-    }
-
-    public void setCost(Double cost) {
-        this.cost = cost;
     }
 
     public void setBookingId(Integer bookingId) {
         this.bookingId = bookingId;
     }
 
-    public String getEmail() {
-        return email;
+    public Integer getPatientId() {
+        return patientId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getBookingType() {
-        return bookingType;
-    }
-
-    public void setBookingType(String bookingType) {
-        this.bookingType = bookingType;
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
     }
 
     public String getPickupAddress() {
@@ -69,21 +56,52 @@ public class BookingDTO {
         this.bookingStatus = bookingStatus;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
+    public double getLatitude() {
+        return latitude;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public double getLongitude() {
+        return longitude;
     }
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
-// Getters và Setters
-    // ...
+
+    public double getDestinationLatitude() {
+        return destinationLatitude;
+    }
+
+    public void setDestinationLatitude(double destinationLatitude) {
+        this.destinationLatitude = destinationLatitude;
+    }
+
+    public double getDestinationLongitude() {
+        return destinationLongitude;
+    }
+
+    public void setDestinationLongitude(double destinationLongitude) {
+        this.destinationLongitude = destinationLongitude;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public String getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
+    }
+// Getters và setters
 }

@@ -82,18 +82,8 @@ public class BookingController {
         // Tạo đối tượng Booking mới
         Booking newBooking = new Booking();
         newBooking.setPatient(patientOpt.get()); // Lấy đối tượng Patients từ Optional
-
-        // Thiết lập địa chỉ đón
         newBooking.setPickupAddress(bookingRequest.getPickupAddress());
-
-        // Đặt loại đặt chỗ là không khẩn cấp
-
-        // Sử dụng thời gian hiện tại nếu không có thời gian đón cụ thể
-        newBooking.setPickupTime(bookingRequest.getPickupTime() != null
-                ? bookingRequest.getPickupTime()
-                : LocalDateTime.now());
-
-        // Thiết lập các thông tin khác
+        newBooking.setPickupTime(bookingRequest.getPickupTime());
         newBooking.setBookingStatus("Pending");
         newBooking.setLatitude(bookingRequest.getLatitude());
         newBooking.setLongitude(bookingRequest.getLongitude());

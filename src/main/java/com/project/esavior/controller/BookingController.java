@@ -153,14 +153,20 @@ public class BookingController {
         double distance = calculateDistance(startLatitude, startLongitude, destinationLatitude, destinationLongitude);
 
         // Giả sử mỗi km có giá là 10000 VND
-        double costPerKm = 1;
-        double totalCost = distance * costPerKm;
+        double costPerKmVND = 10000; // Chi phí tính bằng VND
+        double costInVND = distance * costPerKmVND;
+
+        // Chuyển đổi sang USD, giả sử tỷ giá 1 USD = 23000 VND
+        double exchangeRate = 23000;
+        double costInUSD = costInVND / exchangeRate;
 
         // Tạo response với chi phí
         Map<String, Object> response = new HashMap<>();
         response.put("distance", distance);
-        response.put("cost", totalCost);
+        response.put("costInVND", costInVND);
+        response.put("costInUSD", costInUSD);
 
         return ResponseEntity.ok(response);
     }
+
 }

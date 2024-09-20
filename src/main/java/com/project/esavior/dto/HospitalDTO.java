@@ -12,6 +12,25 @@ public class HospitalDTO {
     private LocalDateTime updatedAt;
     private String zipCode;
     // Getters và Setters
+    private Double latitude; // Thêm trường này
+    private Double longitude;
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
     public Integer getHospitalId() {
         return hospitalId;
     }

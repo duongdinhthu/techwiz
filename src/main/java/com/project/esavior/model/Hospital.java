@@ -44,10 +44,30 @@ public class Hospital {
     @Column(name = "zip_code")
     private String zipCode;
 
+    @Column(name = "latitude")
+    private Double latitude; // Thêm trường này
+
+    @Column(name = "longitude")
+    private Double longitude;
     // Constructors, Getters và Setters
     public Hospital() {}
 
-    // Getters and Setters for each field
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+// Getters and Setters for each field
 
     public Integer getHospitalId() {
         return hospitalId;

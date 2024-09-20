@@ -33,6 +33,9 @@ public class HospitalController {
             dto.setCreatedAt(hospital.getCreatedAt());
             dto.setUpdatedAt(hospital.getUpdatedAt());
             dto.setZipCode(hospital.getZipCode());
+            dto.setLatitude(hospital.getLatitude());
+            dto.setLongitude(hospital.getLongitude());
+
             return dto;
         }).toList();
 

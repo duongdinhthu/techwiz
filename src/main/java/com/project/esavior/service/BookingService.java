@@ -34,8 +34,10 @@ public class BookingService {
     public List<Booking> findBookingByDriverId(Integer driverId) {
         return bookingRepository.findByDriverId(driverId);
     }
+
+    // Tìm Booking theo patientId
     public List<Booking> findBookingByPatientId(Integer patientId) {
-        return bookingRepository.findByDriverId(patientId);
+        return bookingRepository.findByPatientId(patientId);
     }
     // Tìm kiếm chi tiết đặt chỗ theo tên bệnh viện
     public List<Booking> findByHospitalName(String hospitalName) {

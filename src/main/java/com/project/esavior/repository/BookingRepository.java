@@ -12,7 +12,9 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
     List<Booking> findByHospital_HospitalName(String hospitalName);
 
     List<Booking> findByDriverId(Integer driverId);
-    List<Booking> findByPatientId(Integer driverId);
+
+    // Tìm danh sách Booking theo patientId
+    List<Booking> findByPatientId(Integer patientId);
 
 
     Booking findBookingByBookingId(Integer bookingId);

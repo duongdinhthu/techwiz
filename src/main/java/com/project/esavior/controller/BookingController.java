@@ -143,15 +143,19 @@ public class BookingController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-    @GetMapping("/driverId/{id}")
+    @GetMapping("/driverId/{driverId}")
     public List<BookingDTO> getBookingsByDriverId(@PathVariable Integer driverId) {
-        return bookingService.findBookingByDriverId(driverId).stream()
+        List<Booking> bookings = bookingService.findBookingByDriverId(driverId);
+        return bookings.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-    @GetMapping("/patientId/{id}")
+
+    // Lấy danh sách Booking theo patientId
+    @GetMapping("/patientId/{patientId}")
     public List<BookingDTO> getBookingsByPatientId(@PathVariable Integer patientId) {
-        return bookingService.findBookingByPatientId(patientId).stream()
+        List<Booking> bookings = bookingService.findBookingByPatientId(patientId);
+        return bookings.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }

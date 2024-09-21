@@ -177,6 +177,4 @@ public class DriverController {
         }
         return ResponseEntity.ok("Booking accepted and driver location updated");
     }
-
-
 }

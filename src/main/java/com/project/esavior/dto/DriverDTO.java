@@ -18,6 +18,12 @@ public class DriverDTO {
     public DriverDTO() {
     }
 
+    public DriverDTO(Integer driverId, String driverName, String driverPhone) {
+        this.driverId = driverId;
+        this.driverName = driverName;
+        this.driverPhone = driverPhone;
+    }
+
     public DriverDTO(String driverName, String driverPhone) {
         this.driverName = driverName;
         this.driverPhone = driverPhone;

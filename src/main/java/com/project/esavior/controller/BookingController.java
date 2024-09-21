@@ -2,8 +2,10 @@ package com.project.esavior.controller;
 
 import com.project.esavior.dto.BookingDTO;
 import com.project.esavior.model.Booking;
+import com.project.esavior.model.Driver;
 import com.project.esavior.model.Patients;
 import com.project.esavior.service.BookingService;
+import com.project.esavior.service.DriverService;
 import com.project.esavior.service.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +22,15 @@ import java.util.Optional;
 @RequestMapping("/api/bookings")
 public class BookingController {
 
+    private final DriverService driverService;
+
     private final BookingService bookingService;
     private final PatientsService patientsService;
-
     @Autowired
-    public BookingController(BookingService bookingService, PatientsService patientsService) {
+    public BookingController(BookingService bookingService, PatientsService patientsService,DriverService driverService) {
         this.bookingService = bookingService;
         this.patientsService = patientsService;
+        this.driverService = driverService;
     }
     @PostMapping("/emergency")
     public ResponseEntity<Booking> createEmergencyBooking(@RequestBody Booking bookingRequest) {
@@ -60,6 +64,7 @@ public class BookingController {
         newBooking.setDestinationLatitude(bookingRequest.getDestinationLatitude());
         newBooking.setDestinationLongitude(bookingRequest.getDestinationLongitude());
         newBooking.setCost(bookingRequest.getCost());
+        newBooking.setAmbulanceType(bookingRequest.getAmbulanceType());
         Booking savedBooking = bookingService.createBooking(newBooking);
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
@@ -95,31 +100,15 @@ public class BookingController {
 
         // Lưu thông tin đặt chỗ
         Booking savedBooking = bookingService.createBooking(newBooking);
-        BookingDTO bookingDTO = convertToDTO(savedBooking);
 
-        return new ResponseEntity<>(bookingDTO, HttpStatus.CREATED);
-    }
-    public BookingDTO convertToDTO(Booking booking) {
-        BookingDTO bookingDTO = new BookingDTO();
-        bookingDTO.setBookingId(booking.getBookingId());
-        bookingDTO.setPatientId(booking.getPatient().getPatientId());  // Lấy patientId từ đối tượng Patient
-        bookingDTO.setPickupAddress(booking.getPickupAddress());
-        bookingDTO.setPickupTime(booking.getPickupTime());
-        bookingDTO.setBookingStatus(booking.getBookingStatus());
-        bookingDTO.setLatitude(booking.getLatitude());
-        bookingDTO.setLongitude(booking.getLongitude());
-        bookingDTO.setDestinationLatitude(booking.getDestinationLatitude());
-        bookingDTO.setDestinationLongitude(booking.getDestinationLongitude());
-        bookingDTO.setCost(booking.getCost());
-        bookingDTO.setBookingType(booking.getBookingType());
-        return bookingDTO;
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
     // Tạo đặt chỗ mới
     @PostMapping
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking) {
         Booking newBooking = bookingService.createBooking(booking);
-        return new ResponseEntity<>(newBooking, HttpStatus.CREATED);
+        return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
     // Lấy danh sách đặt chỗ
@@ -216,5 +205,35 @@ public class BookingController {
         return ResponseEntity.ok(response);
     }
 
+    // Cập nhật driverId cho booking
+    @PutMapping("/update-driver/{id}")
+    public ResponseEntity<Booking> updateBookingWithDriverId(@PathVariable Integer id, @RequestBody Map<String, Object> requestData) {
+        // Lấy driverId từ request body
+        Integer driverId = (Integer) requestData.get("driverId");
 
+        // Kiểm tra xem booking với id có tồn tại không
+        Optional<Booking> bookingOptional = bookingService.findBookingById(id);
+        if (bookingOptional.isPresent()) {
+            Booking booking = bookingOptional.get();
+
+            // Kiểm tra xem driver với driverId có tồn tại không
+            Optional<Driver> driverOptional = driverService.findDriverById(driverId);
+            if (driverOptional.isPresent()) {
+                Driver driver = driverOptional.get();
+
+                // Cập nhật driver cho booking
+                booking.setDriver(driver);
+
+                // Lưu booking đã cập nhật
+                Booking updatedBooking = bookingService.updateBooking(id, booking);
+                return ResponseEntity.ok(updatedBooking);
+            } else {
+                // Trả về 404 nếu không tìm thấy driver
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            // Trả về 404 nếu không tìm thấy booking
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

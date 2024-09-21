@@ -26,11 +26,16 @@ public class Booking {
     @JoinColumn(name = "hospital_id")
     private Hospital hospital;
 
+
     @Column(name = "latitude")
     private Double latitude; // Thêm trường này
 
     @Column(name = "longitude")
     private Double longitude;
+
+    @ManyToOne
+    @JoinColumn(name = "driver_id")  // Thêm cột driver_id
+    private Driver driver;  // Đối tượng Driver liên kết với đơn đặt
 
     @Column(name = "destination_latitude")
     private Double destinationLatitude;
@@ -47,6 +52,14 @@ public class Booking {
     @Column(name = "pickup_time")
     private LocalDateTime pickupTime;
 
+    public Driver getDriver() {
+        return driver;
+    }
+
+    public void setDriver(Driver driver) {
+        this.driver = driver;
+    }
+
     @Column(name = "booking_status")
     private String bookingStatus;
 
@@ -58,6 +71,9 @@ public class Booking {
 
     @Column(name = "cost")
     private Double cost;
+
+    @Column(name = "ambulance_type")
+    private String ambulanceType;
 
     @Column(name = "zip_code")  // Thêm cột zipCode
     private String zipCode;
@@ -76,6 +92,14 @@ public class Booking {
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
+    }
+
+    public String getAmbulanceType() {
+        return ambulanceType;
+    }
+
+    public void setAmbulanceType(String ambulanceType) {
+        this.ambulanceType = ambulanceType;
     }
 
     public void setCost(Double cost) {

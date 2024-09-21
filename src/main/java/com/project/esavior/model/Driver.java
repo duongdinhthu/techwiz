@@ -1,8 +1,5 @@
 package com.project.esavior.model;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import java.util.List;  // Import List
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -23,6 +20,9 @@ public class Driver {
 
     @Column(name = "password")
     private String password;
+
+    @OneToMany(mappedBy = "driver", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 
     @Column(name = "driver_phone", nullable = false, unique = true)
     private String driverPhone;
@@ -50,6 +50,10 @@ public class Driver {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
+
+
+
+
 
     private Hospital hospital;
     // Constructors, Getters và Setters

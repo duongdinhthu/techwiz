@@ -49,8 +49,8 @@ public class BookingService {
     }
 
     // Lấy chi tiết đặt chỗ theo ID
-    public Booking getBookingById(Integer id) {
-        Optional<Booking> booking = bookingRepository.findById(id);
+    public Booking getBookingById(Integer bookingId) {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
         return booking.orElse(null);
     }
 
@@ -77,5 +77,8 @@ public class BookingService {
             return true;
         }
         return false;
+    }
+    public Optional<Booking> findBookingById(Integer bookingId) {
+        return bookingRepository.findById(bookingId);
     }
 }

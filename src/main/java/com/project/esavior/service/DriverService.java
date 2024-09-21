@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DriverService {
@@ -20,7 +21,9 @@ public class DriverService {
         this.driverRepository = driverRepository;
         this.bookingRepository = bookingRepository;
     }
-
+    public Optional<Driver> findDriverById(Integer driverId) {
+        return driverRepository.findById(driverId);
+    }
     // Đăng nhập tài xế
     public Driver authenticateDriver(String email, String password) {
         Driver driver = driverRepository.findByEmail(email);

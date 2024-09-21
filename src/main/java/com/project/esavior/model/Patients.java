@@ -15,17 +15,14 @@ public class Patients {
     @Column(name = "patient_id")
     private Integer patientId;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "patient_email", unique = true)
     private String email;
 
     @Column(name = "patient_name", nullable = false)
     private String patientName;
 
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Column(name = "patient_phone", nullable = false, unique = true)
     private String phoneNumber;
-
-    @Column(name = "address")
-    private String address;
 
     @Column(name = "zip_code")
     private String zipCode;
@@ -48,6 +45,9 @@ public class Patients {
     @Column(name = "patient_created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "patient_address")
+    private String patientAddress;
+
     @Column(name = "patient_updated_at")
     private LocalDateTime updatedAt;
 
@@ -66,6 +66,14 @@ public class Patients {
 
     // Constructors, Getters và Setters
     public Patients() {
+    }
+
+    public String getPatientAddress() {
+        return patientAddress;
+    }
+
+    public void setPatientAddress(String patientAddress) {
+        this.patientAddress = patientAddress;
     }
 
     // Getters và Setters cho các trường mới
@@ -158,14 +166,6 @@ public class Patients {
         this.password = password;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getZipCode() {
         return zipCode;
     }
@@ -213,7 +213,6 @@ public class Patients {
                 ", email='" + email + '\'' +
                 ", patientName='" + patientName + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
                 ", zipCode='" + zipCode + '\'' +
                 ", emergencyContact='" + emergencyContact + '\'' +
                 ", password='" + password + '\'' +

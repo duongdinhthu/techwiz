@@ -98,7 +98,7 @@ public class PatientsController {
         dto.setEmail(patient.getEmail());
         dto.setPatientName(patient.getPatientName());
         dto.setPhoneNumber(patient.getPhoneNumber());
-        dto.setAddress(patient.getAddress());
+        dto.setAddress(patient.getPatientAddress());
         dto.setZipCode(patient.getZipCode());
         dto.setEmergencyContact(patient.getEmergencyContact());
         dto.setLatitude(patient.getLatitude());

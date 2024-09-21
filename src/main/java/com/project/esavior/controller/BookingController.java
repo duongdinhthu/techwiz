@@ -35,6 +35,7 @@ public class BookingController {
         this.driverService = driverService;
     }
 
+
     @PostMapping("/emergency")
     public ResponseEntity<BookingDTO> createEmergencyBooking(@RequestBody Booking bookingRequest) {
         // Debug: In ra JSON request để kiểm tra
@@ -142,7 +143,12 @@ public class BookingController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
+    @GetMapping("/driverId/{id}")
+    public List<BookingDTO> getBookingsByDriverId(@PathVariable Integer driverId) {
+        return bookingService.findBookingByDriverId(driverId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
     // Tìm kiếm tất cả đặt chỗ liên quan đến một từ khóa (search)
     @GetMapping("/keyword")
     public List<BookingDTO> searchBookings(@RequestParam String keyword) {

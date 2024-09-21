@@ -25,8 +25,44 @@ public class BookingDTO {
     private Double cost;
     private String ambulanceType;
     private String zipCode;
+    private String patientName;   // Thêm trường này để chứa tên bệnh nhân
+    private String patientPhone;
+    public BookingDTO(Integer patientId, Double latitude, Double longitude, Double destinationLatitude, Double destinationLongitude, String bookingType, String bookingStatus, Double cost) {
+        this.patientId = patientId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongitude = destinationLongitude;
+        this.bookingType = bookingType;
+        this.bookingStatus = bookingStatus;
+        this.cost = cost;
+    }
 
+    public BookingDTO(Double latitude, Double longitude, Double destinationLatitude, Double destinationLongitude, String pickupAddress, String patientName, String patientPhone) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongitude = destinationLongitude;
+        this.pickupAddress = pickupAddress;
+        this.patientName = patientName;
+        this.patientPhone = patientPhone;
+    }
 
+    public String getPatientName() {
+        return patientName;
+    }
+
+    public void setPatientName(String patientName) {
+        this.patientName = patientName;
+    }
+
+    public String getPatientPhone() {
+        return patientPhone;
+    }
+
+    public void setPatientPhone(String patientPhone) {
+        this.patientPhone = patientPhone;
+    }
 
     // Constructor không tham số
     public BookingDTO() {}

@@ -1,7 +1,9 @@
 package com.project.esavior.service;
 
 import com.project.esavior.model.Booking;
+import com.project.esavior.model.Driver;
 import com.project.esavior.repository.BookingRepository;
+import com.project.esavior.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,14 @@ import java.util.Optional;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
+    private final DriverRepository driverRepository; // Cần để lấy thông tin tài xế
+
+
 
     @Autowired
-    public BookingService(BookingRepository bookingRepository) {
+    public BookingService(BookingRepository bookingRepository, DriverRepository driverRepository) {
         this.bookingRepository = bookingRepository;
+        this.driverRepository = driverRepository;
     }
 
     public Booking save(Booking booking) {
@@ -34,7 +40,10 @@ public class BookingService {
     public List<Booking> findBookingByDriverId(Integer driverId) {
         return bookingRepository.findByDriver_DriverId(driverId);
     }
-
+    public Optional<Booking> getBookingForDriver(Integer driverId) {
+        // Lấy booking mới nhất cho tài xế với driverId
+        return bookingRepository.findTopByDriverDriverIdOrderByBookingIdDesc(driverId);
+    }
     // Tìm Booking theo patientId
     public List<Booking> findBookingByPatientId(Integer patientId) {
         return bookingRepository.findByPatient_PatientId(patientId);
@@ -92,4 +101,18 @@ public class BookingService {
     public Optional<Booking> findBookingById(Integer bookingId) {
         return bookingRepository.findById(bookingId);
     }
+
+    public void saveBookingForDriver(Integer driverId, double latitude, double longitude) {
+        // Tìm kiếm driver và lưu thông tin đặt xe
+        Driver driver = driverRepository.findById(driverId) // Ép kiểu sang Long nếu cần thiết
+                .orElseThrow(() -> new IllegalArgumentException("Driver not found with id: " + driverId));
+
+        Booking booking = new Booking();
+        booking.setDriver(driver);
+        booking.setLatitude(latitude);
+        booking.setLongitude(longitude);
+
+        bookingRepository.save(booking);
+    }
+
 }

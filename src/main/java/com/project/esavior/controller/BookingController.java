@@ -3,9 +3,11 @@ package com.project.esavior.controller;
 import com.project.esavior.dto.BookingDTO;
 import com.project.esavior.model.Booking;
 import com.project.esavior.model.Driver;
+import com.project.esavior.model.Location;
 import com.project.esavior.model.Patients;
 import com.project.esavior.service.BookingService;
 import com.project.esavior.service.DriverService;
+import com.project.esavior.service.LocationService;
 import com.project.esavior.service.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +29,13 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final PatientsService patientsService;
-
+    private final LocationService locationService;
     @Autowired
-    public BookingController(BookingService bookingService, PatientsService patientsService, DriverService driverService) {
+    public BookingController(BookingService bookingService, PatientsService patientsService, DriverService driverService,LocationService locationService) {
         this.bookingService = bookingService;
         this.patientsService = patientsService;
         this.driverService = driverService;
+        this.locationService = locationService;
     }
 
 
@@ -42,27 +45,39 @@ public class BookingController {
         System.out.println("Booking Request: " + bookingRequest);
         System.out.println(bookingRequest.getPatient().getEmail());
 
+        // Kiểm tra xem thông tin bệnh nhân có tồn tại không
         if (bookingRequest.getPatient() == null || bookingRequest.getPatient().getEmail() == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Yêu cầu không hợp lệ
         }
 
+        // Tìm bệnh nhân theo email
         Optional<Patients> patientOpt = patientsService.findByEmail(bookingRequest.getPatient().getEmail());
         if (patientOpt.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Không tìm thấy bệnh nhân
         }
 
+        // Tạo mới booking
         Booking newBooking = new Booking();
         newBooking.setPatient(patientOpt.get());
         newBooking.setBookingType("Provide");
         newBooking.setPickupAddress(bookingRequest.getPickupAddress());
         newBooking.setPickupTime(LocalDateTime.now());
         newBooking.setBookingStatus("Pending");
-        newBooking.setLatitude(bookingRequest.getLatitude());
-        newBooking.setLongitude(bookingRequest.getLongitude());
         newBooking.setDestinationLatitude(bookingRequest.getDestinationLatitude());
         newBooking.setDestinationLongitude(bookingRequest.getDestinationLongitude());
         newBooking.setCost(bookingRequest.getCost());
         newBooking.setAmbulanceType(bookingRequest.getAmbulanceType());
+
+        // Cập nhật thông tin vị trí và khách hàng vào LocationService
+        // Lưu thông tin vị trí và khách hàng vào LocationService
+        locationService.updateLocationAndCustomerInfo(
+                new Location(bookingRequest.getLatitude(), bookingRequest.getLongitude()), // Truyền đúng đối tượng Location
+                patientOpt.get().getPatientName(), // Tên khách hàng
+                patientOpt.get().getPhoneNumber(), // Số điện thoại khách hàng
+                patientOpt.get().getEmail(), // Email khách hàng
+                bookingRequest.getDestinationLatitude(), // Latitude điểm đến
+                bookingRequest.getDestinationLongitude()  // Longitude điểm đến
+        );
 
         // Lưu booking mới
         Booking savedBooking = bookingService.createBooking(newBooking);
@@ -73,6 +88,7 @@ public class BookingController {
         // Trả về bookingDTO đã lưu kèm theo ID
         return new ResponseEntity<>(bookingDTO, HttpStatus.CREATED);
     }
+
 
 
 

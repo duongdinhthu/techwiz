@@ -1,11 +1,15 @@
 package com.project.esavior.controller;
 
+import com.project.esavior.dto.BookingDTO;
 import com.project.esavior.dto.DriverDTO;
 import com.project.esavior.model.Booking;
 import com.project.esavior.model.Driver;
+import com.project.esavior.model.Patients;
 import com.project.esavior.service.BookingService;
 import com.project.esavior.service.DriverService;
 
+import com.project.esavior.service.LocationService;
+import com.project.esavior.service.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +27,17 @@ import java.util.Optional;
 @RequestMapping("/api/drivers")
 public class DriverController {
 
-    @Autowired
     private DriverService driverService;
-    @Autowired
     private BookingService bookingService;
+    private LocationService locationService;
+    private PatientsService patientsService;
+    public DriverController(LocationService locationService,BookingService bookingService,DriverService driverService,PatientsService patientsService) {
+        this.locationService = locationService;
+        this.bookingService = bookingService;
+        this.driverService = driverService;
+        this.patientsService = patientsService;
+    }
+
 
     // Đăng nhập tài xế
     @PostMapping("/login")
@@ -125,49 +136,73 @@ public class DriverController {
             return ResponseEntity.noContent().build();
         }
 
-        // Chuyển đổi danh sách Driver thành danh sách DriverDTO với chỉ tên và số điện thoại
+        // Chuyển đổi danh sách Driver thành danh sách DriverDTO
         List<DriverDTO> driverDTOs = nearestDrivers.stream()
                 .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(), driver.getDriverName(), driver.getLongitude(), driver.getLatitude()))
                 .toList();
 
-        // Trả về danh sách DTO
+        // Lấy tài xế đầu tiên trong danh sách gần nhất
+        Driver nearestDriver = nearestDrivers.get(0);
+
+        // Lưu driverId vào LocationService
+        locationService.updateDriverId(nearestDriver.getDriverId());
+
+        // Cập nhật booking với driverId và vị trí khách hàng
+        bookingService.saveBookingForDriver(nearestDriver.getDriverId(), latitude, longitude);
+
+        // Trả về danh sách tài xế gần nhất (DTOs)
         return ResponseEntity.ok(driverDTOs);
     }
 
-    @PutMapping("/accept-booking/{bookingId}")
-    public ResponseEntity<?> acceptBooking(@PathVariable Integer bookingId, @RequestBody Map<String, Object> requestData) throws IOException {
-        Integer driverId = (Integer) requestData.get("driverId");
+    @GetMapping("/check-booking/{driverId}")
+    public ResponseEntity<BookingDTO> checkForNewBooking(@PathVariable Integer driverId) {
+        // Lấy booking mới nhất của tài xế từ BookingService
+        Optional<Booking> newBooking = bookingService.getBookingForDriver(driverId);
 
-        // Tìm booking theo bookingId
-        Optional<Booking> bookingOptional = bookingService.findBookingById(bookingId);
-        if (!bookingOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Booking not found");
+        if (newBooking.isPresent()) {
+            Booking booking = newBooking.get();
+
+            // Lấy thông tin bệnh nhân từ patientId
+            Patients patient = patientsService.getPatientById(booking.getPatient().getPatientId());
+            String patientName = patient.getPatientName();
+            String patientPhone = patient.getPhoneNumber();
+
+            // Tạo BookingDTO với thông tin cần thiết
+            BookingDTO bookingDTO = new BookingDTO(
+                    booking.getLatitude(),           // Vĩ độ điểm đón
+                    booking.getLongitude(),          // Kinh độ điểm đón
+                    booking.getDestinationLatitude(),// Vĩ độ điểm đến
+                    booking.getDestinationLongitude(),// Kinh độ điểm đến
+                    booking.getPickupAddress(),      // Địa chỉ điểm đón
+                    patientName,                     // Tên bệnh nhân
+                    patientPhone                     // Số điện thoại bệnh nhân
+            );
+
+            return ResponseEntity.ok(bookingDTO);
+        } else {
+            return ResponseEntity.noContent().build();  // Không có đơn đặt xe mới
         }
-
-        Booking booking = bookingOptional.get();
-
-        // Tìm tài xế theo driverId
-        Optional<Driver> driverOptional = driverService.findDriverById(driverId);
-        if (!driverOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Driver not found");
-        }
-
-        Driver driver = driverOptional.get();
-
-        // Cập nhật vị trí của tài xế theo điểm đón của khách hàng
-        driver.setLatitude(booking.getLatitude());
-        driver.setLongitude(booking.getLongitude());
-
-        // Lưu thông tin tài xế đã cập nhật
-        driverService.save(driver);
-
-        // Cập nhật trạng thái booking
-        booking.setBookingStatus("Accepted");
-        booking.setDriver(driver);  // Gán tài xế cho booking
-        bookingService.save(booking);
-
-        // Gửi thông báo tới khách hàng hoặc tài xế qua WebSocket
-
-        return ResponseEntity.ok("Booking accepted and driver location updated");
     }
+//    @PostMapping("/nearest")
+//    public ResponseEntity<List<DriverDTO>> findNearestDrivers(@RequestBody Map<String, Double> location) {
+//        double latitude = location.get("latitude");
+//        double longitude = location.get("longitude");
+//
+//        // Tìm các tài xế gần nhất
+//        List<Driver> nearestDrivers = driverService.findNearestDrivers(latitude, longitude);
+//
+//        // Nếu không có tài xế gần nhất
+//        if (nearestDrivers.isEmpty()) {
+//            return ResponseEntity.noContent().build();
+//        }
+//
+//        // Chuyển đổi danh sách Driver thành danh sách DriverDTO với chỉ tên và số điện thoại
+//        List<DriverDTO> driverDTOs = nearestDrivers.stream()
+//                .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(), driver.getDriverName(), driver.getLongitude(), driver.getLatitude()))
+//                .toList();
+//
+//        // Trả về danh sách tài xế gần nhất (DTOs)
+//        return ResponseEntity.ok(driverDTOs);
+//    }
+
 }

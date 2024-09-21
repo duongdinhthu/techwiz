@@ -24,7 +24,10 @@ public class PatientsService {
     public Optional<Patients> getPatientProfile(Integer id) {
         return patientsRepository.findById(id);
     }
-
+    public Patients getPatientById(Integer patientId) {
+        return patientsRepository.findById(patientId)
+                .orElseThrow(() -> new IllegalArgumentException("Patient not found with id: " + patientId));
+    }
     public Patients updatePatientProfile(Integer id, Patients updatedPatient) {
         Optional<Patients> patient = patientsRepository.findById(id);
         if (patient.isPresent()) {

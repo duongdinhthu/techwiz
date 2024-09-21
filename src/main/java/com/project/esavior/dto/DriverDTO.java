@@ -19,10 +19,12 @@ public class DriverDTO {
     // Constructor không tham số
     public DriverDTO() {}
 
-    public DriverDTO(Integer driverId, String driverName, String driverPhone) {
+    public DriverDTO(Integer driverId, String driverName, String driverPhone, Double longitude, Double latitude) {
         this.driverId = driverId;
         this.driverName = driverName;
         this.driverPhone = driverPhone;
+        this.longitude = longitude;
+        this.latitude = latitude;
     }
 
     // Constructor có tham số

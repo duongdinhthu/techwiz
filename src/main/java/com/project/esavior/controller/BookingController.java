@@ -149,6 +149,12 @@ public class BookingController {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    @GetMapping("/patientId/{id}")
+    public List<BookingDTO> getBookingsByPatientId(@PathVariable Integer patientId) {
+        return bookingService.findBookingByPatientId(patientId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
     // Tìm kiếm tất cả đặt chỗ liên quan đến một từ khóa (search)
     @GetMapping("/keyword")
     public List<BookingDTO> searchBookings(@RequestParam String keyword) {

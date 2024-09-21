@@ -5,7 +5,7 @@ import com.project.esavior.model.Booking;
 import com.project.esavior.model.Driver;
 import com.project.esavior.service.BookingService;
 import com.project.esavior.service.DriverService;
-import com.project.esavior.websocket.WebSocketSessionManager;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/drivers")
 public class DriverController {
-    @Autowired
-    private WebSocketSessionManager webSocketSessionManager;
+
     @Autowired
     private DriverService driverService;
     @Autowired
@@ -168,13 +167,7 @@ public class DriverController {
         bookingService.save(booking);
 
         // Gửi thông báo tới khách hàng hoặc tài xế qua WebSocket
-        WebSocketSession session = webSocketSessionManager.getSession(driver.getDriverId());
-        if (session != null && session.isOpen()) {
-            String message = "Tài xế đã chấp nhận đơn hàng. Thông tin điểm đón: " + booking.getPickupAddress();
-            session.sendMessage(new TextMessage(message));
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("WebSocket session is not available");
-        }
+
         return ResponseEntity.ok("Booking accepted and driver location updated");
     }
 }

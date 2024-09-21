@@ -32,12 +32,12 @@ public class BookingService {
     }
 
     public List<Booking> findBookingByDriverId(Integer driverId) {
-        return bookingRepository.findByDriverId(driverId);
+        return bookingRepository.findByDriver_DriverId(driverId);
     }
 
     // Tìm Booking theo patientId
     public List<Booking> findBookingByPatientId(Integer patientId) {
-        return bookingRepository.findByPatientId(patientId);
+        return bookingRepository.findByPatient_PatientId(patientId);
     }
     // Tìm kiếm chi tiết đặt chỗ theo tên bệnh viện
     public List<Booking> findByHospitalName(String hospitalName) {

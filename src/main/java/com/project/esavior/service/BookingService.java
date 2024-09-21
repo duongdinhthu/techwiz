@@ -18,6 +18,9 @@ public class BookingService {
         this.bookingRepository = bookingRepository;
     }
 
+    public Booking save(Booking booking) {
+        return bookingRepository.save(booking);
+    }
     // Tạo đặt chỗ mới
     public Booking createBooking(Booking booking) {
         return bookingRepository.save(booking);

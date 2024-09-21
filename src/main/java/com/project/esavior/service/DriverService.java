@@ -69,4 +69,7 @@ public class DriverService {
         // Gọi hàm tìm tài xế từ repository
         return driverRepository.findDriversInRange(minLatitude, maxLatitude, minLongitude, maxLongitude);
     }
+    public Driver save(Driver driver) {
+        return driverRepository.save(driver);
+    }
 }

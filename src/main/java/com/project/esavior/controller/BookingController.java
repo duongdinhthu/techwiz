@@ -36,7 +36,7 @@ public class BookingController {
     }
 
     @PostMapping("/emergency")
-    public ResponseEntity<Booking> createEmergencyBooking(@RequestBody Booking bookingRequest) {
+    public ResponseEntity<BookingDTO> createEmergencyBooking(@RequestBody Booking bookingRequest) {
         // Debug: In ra JSON request để kiểm tra
         System.out.println("Booking Request: " + bookingRequest);
         System.out.println(bookingRequest.getPatient().getEmail());
@@ -63,10 +63,17 @@ public class BookingController {
         newBooking.setCost(bookingRequest.getCost());
         newBooking.setAmbulanceType(bookingRequest.getAmbulanceType());
 
+        // Lưu booking mới
         Booking savedBooking = bookingService.createBooking(newBooking);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        // Chuyển đổi Booking thành BookingDTO
+        BookingDTO bookingDTO = convertToDTO(savedBooking);
+
+        // Trả về bookingDTO đã lưu kèm theo ID
+        return new ResponseEntity<>(bookingDTO, HttpStatus.CREATED);
     }
+
+
 
     @PostMapping("/non-emergency")
     public ResponseEntity<BookingDTO> createNonEmergencyBooking(@RequestBody Booking bookingRequest) {
@@ -196,46 +203,59 @@ public class BookingController {
     public ResponseEntity<BookingDTO> updateBookingWithDriverId(@PathVariable Integer id, @RequestBody Map<String, Object> requestData) {
         Integer driverId = (Integer) requestData.get("driverId");
 
+        // Tìm kiếm booking bằng ID
         Optional<Booking> bookingOptional = bookingService.findBookingById(id);
         if (bookingOptional.isPresent()) {
             Booking booking = bookingOptional.get();
 
+            // Tìm kiếm driver bằng ID
             Optional<Driver> driverOptional = driverService.findDriverById(driverId);
             if (driverOptional.isPresent()) {
                 Driver driver = driverOptional.get();
+
+                // Cập nhật driver cho booking
                 booking.setDriver(driver);
-                Booking updatedBooking = bookingService.updateBooking(id, booking);
+
+                // Lưu lại thông tin booking đã cập nhật
+                Booking updatedBooking = bookingService.save(booking);
+
+                // Chuyển đổi thành DTO và trả về
                 return ResponseEntity.ok(convertToDTO(updatedBooking));
             } else {
-                return ResponseEntity.notFound().build();
+                // Không tìm thấy driver
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
         } else {
-            return ResponseEntity.notFound().build();
+            // Không tìm thấy booking
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
+
     private BookingDTO convertToDTO(Booking booking) {
-        return new BookingDTO(
-                booking.getBookingId(),
-                booking.getPatient() != null ? booking.getPatient().getPatientId() : null,
-                booking.getHospital() != null ? booking.getHospital().getHospitalId() : null,
-                booking.getAmbulance() != null ? booking.getAmbulance().getAmbulanceId() : null,
-                booking.getDriver() != null ? booking.getDriver().getDriverId() : null,
-                booking.getLatitude(),
-                booking.getLongitude(),
-                booking.getDestinationLatitude(),
-                booking.getDestinationLongitude(),
-                booking.getBookingType(),
-                booking.getPickupAddress(),
-                booking.getPickupTime(),
-                booking.getBookingStatus(),
-                booking.getCreatedAt(),
-                booking.getUpdatedAt(),
-                booking.getCost(),
-                booking.getAmbulanceType(),
-                booking.getZipCode()
-        );
+        BookingDTO bookingDTO = new BookingDTO();
+        bookingDTO.setBookingId(booking.getBookingId());
+        bookingDTO.setAmbulanceId(booking.getAmbulance() != null ? booking.getAmbulance().getAmbulanceId() : null);
+        bookingDTO.setPatientId(booking.getPatient() != null ? booking.getPatient().getPatientId() : null);
+        bookingDTO.setHospitalId(booking.getHospital() != null ? booking.getHospital().getHospitalId() : null);
+        bookingDTO.setDriverId(booking.getDriver() != null ? booking.getDriver().getDriverId() : null);
+        bookingDTO.setLatitude(booking.getLatitude());
+        bookingDTO.setLongitude(booking.getLongitude());
+        bookingDTO.setDestinationLatitude(booking.getDestinationLatitude());
+        bookingDTO.setDestinationLongitude(booking.getDestinationLongitude());
+        bookingDTO.setBookingType(booking.getBookingType());
+        bookingDTO.setPickupAddress(booking.getPickupAddress());
+        bookingDTO.setPickupTime(booking.getPickupTime());
+        bookingDTO.setBookingStatus(booking.getBookingStatus());
+        bookingDTO.setCreatedAt(booking.getCreatedAt());
+        bookingDTO.setUpdatedAt(booking.getUpdatedAt());
+        bookingDTO.setCost(booking.getCost());
+        bookingDTO.setAmbulanceType(booking.getAmbulanceType());
+        bookingDTO.setZipCode(booking.getZipCode());
+
+        return bookingDTO;
     }
+
 
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371;

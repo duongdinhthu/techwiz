@@ -28,6 +28,7 @@ public class DriverController {
     private DriverService driverService;
     @Autowired
     private BookingService bookingService;
+
     // Đăng nhập tài xế
     @PostMapping("/login")
     public ResponseEntity<?> loginDriver(@RequestBody Map<String, String> loginRequest) {
@@ -127,12 +128,13 @@ public class DriverController {
 
         // Chuyển đổi danh sách Driver thành danh sách DriverDTO với chỉ tên và số điện thoại
         List<DriverDTO> driverDTOs = nearestDrivers.stream()
-                .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(), driver.getDriverName(),driver.getLongitude(),driver.getLatitude()))
+                .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(), driver.getDriverName(), driver.getLongitude(), driver.getLatitude()))
                 .toList();
 
         // Trả về danh sách DTO
         return ResponseEntity.ok(driverDTOs);
     }
+
     @PutMapping("/accept-booking/{bookingId}")
     public ResponseEntity<?> acceptBooking(@PathVariable Integer bookingId, @RequestBody Map<String, Object> requestData) throws IOException {
         Integer driverId = (Integer) requestData.get("driverId");
@@ -170,8 +172,9 @@ public class DriverController {
         if (session != null && session.isOpen()) {
             String message = "Tài xế đã chấp nhận đơn hàng. Thông tin điểm đón: " + booking.getPickupAddress();
             session.sendMessage(new TextMessage(message));
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("WebSocket session is not available");
         }
-
         return ResponseEntity.ok("Booking accepted and driver location updated");
     }
 

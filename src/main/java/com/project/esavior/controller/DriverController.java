@@ -5,11 +5,15 @@ import com.project.esavior.model.Booking;
 import com.project.esavior.model.Driver;
 import com.project.esavior.service.BookingService;
 import com.project.esavior.service.DriverService;
+import com.project.esavior.websocket.WebSocketSessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +22,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/drivers")
 public class DriverController {
-
+    @Autowired
+    private WebSocketSessionManager webSocketSessionManager;
     @Autowired
     private DriverService driverService;
     @Autowired
@@ -129,7 +134,7 @@ public class DriverController {
         return ResponseEntity.ok(driverDTOs);
     }
     @PutMapping("/accept-booking/{bookingId}")
-    public ResponseEntity<?> acceptBooking(@PathVariable Integer bookingId, @RequestBody Map<String, Object> requestData) {
+    public ResponseEntity<?> acceptBooking(@PathVariable Integer bookingId, @RequestBody Map<String, Object> requestData) throws IOException {
         Integer driverId = (Integer) requestData.get("driverId");
 
         // Tìm booking theo bookingId
@@ -160,7 +165,15 @@ public class DriverController {
         booking.setDriver(driver);  // Gán tài xế cho booking
         bookingService.save(booking);
 
+        // Gửi thông báo tới khách hàng hoặc tài xế qua WebSocket
+        WebSocketSession session = webSocketSessionManager.getSession(driver.getDriverId());
+        if (session != null && session.isOpen()) {
+            String message = "Tài xế đã chấp nhận đơn hàng. Thông tin điểm đón: " + booking.getPickupAddress();
+            session.sendMessage(new TextMessage(message));
+        }
+
         return ResponseEntity.ok("Booking accepted and driver location updated");
     }
+
 
 }

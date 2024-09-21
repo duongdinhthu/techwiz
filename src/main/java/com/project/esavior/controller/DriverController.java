@@ -4,6 +4,7 @@ import com.project.esavior.dto.BookingDTO;
 import com.project.esavior.dto.DriverDTO;
 import com.project.esavior.model.Booking;
 import com.project.esavior.model.Driver;
+import com.project.esavior.model.Location;
 import com.project.esavior.model.Patients;
 import com.project.esavior.service.BookingService;
 import com.project.esavior.service.DriverService;
@@ -183,6 +184,31 @@ public class DriverController {
             return ResponseEntity.noContent().build();  // Không có đơn đặt xe mới
         }
     }
+    @GetMapping("/check-driver/{driverId}")
+    public ResponseEntity<Map<String, Object>> checkDriverBooking(@PathVariable Integer driverId) {
+        // Lấy driverId hiện tại từ LocationService
+        Integer savedDriverId = locationService.getDriverId();
+
+        // Kiểm tra nếu driverId khớp với driverId đã lưu
+        if (savedDriverId != null && savedDriverId.equals(driverId)) {
+            // Lấy thông tin khách hàng và tọa độ từ LocationService
+            Map<String, Object> customerAndLocationInfo = locationService.getCustomerAndLocationInfo();
+            return ResponseEntity.ok(customerAndLocationInfo); // Trả về thông tin khách hàng và tọa độ
+        } else {
+            // Nếu không tìm thấy, trả về no content
+            return ResponseEntity.noContent().build();
+        }
+    }
+    @GetMapping("/get-driver-location/{driverId}")
+    public ResponseEntity<Location> getDriverLocation(@PathVariable Integer driverId) {
+        Location location = locationService.getDriverLocation(driverId);
+        if (location != null) {
+            return new ResponseEntity<>(location, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 //    @PostMapping("/nearest")
 //    public ResponseEntity<List<DriverDTO>> findNearestDrivers(@RequestBody Map<String, Double> location) {
 //        double latitude = location.get("latitude");

@@ -53,4 +53,15 @@ public class LocationService {
     public Integer getDriverId() {
         return this.driverId;
     }
+    private Map<Integer, Location> driverLocations = new HashMap<>();
+
+    // Cập nhật vị trí của tài xế
+    public void updateDriverLocation(int driverId, Location location) {
+        driverLocations.put(driverId, location);
+    }
+
+    // Lấy vị trí hiện tại của tài xế
+    public Location getDriverLocation(int driverId) {
+        return driverLocations.get(driverId);
+    }
 }

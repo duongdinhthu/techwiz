@@ -50,11 +50,6 @@ public class Driver {
 
     @ManyToOne
     @JoinColumn(name = "hospital_id")
-
-
-
-
-
     private Hospital hospital;
     // Constructors, Getters và Setters
     public Driver() {}

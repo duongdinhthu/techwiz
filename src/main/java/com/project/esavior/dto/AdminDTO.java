@@ -11,6 +11,17 @@ public class AdminDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public AdminDTO() {
+    }
+
+    public AdminDTO(Integer adminId, String adminName, String adminEmail, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.adminId = adminId;
+        this.adminName = adminName;
+        this.adminEmail = adminEmail;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     // Getters và Setters
     public Integer getAdminId() {
         return adminId;

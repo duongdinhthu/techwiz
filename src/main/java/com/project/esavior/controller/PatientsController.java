@@ -1,5 +1,6 @@
 package com.project.esavior.controller;
 
+import com.project.esavior.dto.PatientsDTO;
 import com.project.esavior.model.Patients;
 import com.project.esavior.service.PatientsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,10 @@ public class PatientsController {
 
     // Đăng ký bệnh nhân mới
     @PostMapping("/register")
-    public ResponseEntity<Patients> registerPatient(@RequestBody Patients patient) {
+    public ResponseEntity<PatientsDTO> registerPatient(@RequestBody Patients patient) {
         Patients registeredPatient = patientsService.registerPatient(patient);
-        return new ResponseEntity<>(registeredPatient, HttpStatus.CREATED);
+        PatientsDTO patientDTO = convertToDTO(registeredPatient);
+        return new ResponseEntity<>(patientDTO, HttpStatus.CREATED);
     }
 
     // Đăng nhập bệnh nhân
@@ -44,18 +46,19 @@ public class PatientsController {
 
     // Xem thông tin hồ sơ bệnh nhân
     @GetMapping("/profile/{id}")
-    public ResponseEntity<Patients> getPatientProfile(@PathVariable Integer id) {
+    public ResponseEntity<PatientsDTO> getPatientProfile(@PathVariable Integer id) {
         return patientsService.getPatientProfile(id)
-                .map(ResponseEntity::ok)
+                .map(patient -> new ResponseEntity<>(convertToDTO(patient), HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // Cập nhật thông tin hồ sơ bệnh nhân
     @PutMapping("/profile/{id}")
-    public ResponseEntity<Patients> updatePatientProfile(@PathVariable Integer id, @RequestBody Patients updatedPatient) {
+    public ResponseEntity<PatientsDTO> updatePatientProfile(@PathVariable Integer id, @RequestBody Patients updatedPatient) {
         try {
             Patients updatedProfile = patientsService.updatePatientProfile(id, updatedPatient);
-            return ResponseEntity.ok(updatedProfile);
+            PatientsDTO updatedProfileDTO = convertToDTO(updatedProfile);
+            return ResponseEntity.ok(updatedProfileDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -74,7 +77,6 @@ public class PatientsController {
         return new ResponseEntity<>(false, HttpStatus.OK); // Email chưa tồn tại
     }
 
-
     // Cập nhật thông tin bệnh nhân nếu email đã tồn tại
     @PutMapping("/update")
     public ResponseEntity<String> updatePatient(@RequestBody Patients patient) {
@@ -87,5 +89,26 @@ public class PatientsController {
             return new ResponseEntity<>("Cập nhật thông tin thành công", HttpStatus.OK);
         }
         return new ResponseEntity<>("Bệnh nhân không tồn tại", HttpStatus.NOT_FOUND);
+    }
+
+    // Phương thức chuyển đổi từ entity sang DTO
+    private PatientsDTO convertToDTO(Patients patient) {
+        PatientsDTO dto = new PatientsDTO();
+        dto.setPatientId(patient.getPatientId());
+        dto.setEmail(patient.getEmail());
+        dto.setPatientName(patient.getPatientName());
+        dto.setPhoneNumber(patient.getPhoneNumber());
+        dto.setAddress(patient.getAddress());
+        dto.setZipCode(patient.getZipCode());
+        dto.setEmergencyContact(patient.getEmergencyContact());
+        dto.setLatitude(patient.getLatitude());
+        dto.setLongitude(patient.getLongitude());
+        dto.setPatientDob(patient.getPatientDob());
+        dto.setPatientGender(patient.getPatientGender());
+        dto.setPatientCode(patient.getPatientCode());
+        dto.setPatientImg(patient.getPatientImg());
+        dto.setCreatedAt(patient.getCreatedAt());
+        dto.setUpdatedAt(patient.getUpdatedAt());
+        return dto;
     }
 }

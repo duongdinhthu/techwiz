@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 public class PatientsDTO {
+
     private Integer patientId;
     private String email;
     private String patientName;
@@ -11,16 +12,44 @@ public class PatientsDTO {
     private String address;
     private String zipCode;
     private String emergencyContact;
+    private String password;
     private Double latitude;
     private Double longitude;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Date patientDob;
-    private String patientGender;
-    private String patientCode;
-    private String patientImg;
+    private Date patientDob; // Ngày sinh
+    private String patientGender; // Giới tính
+    private String patientCode; // Mã bệnh nhân
+    private String patientImg; // Đường dẫn ảnh bệnh nhân
 
-    // Getters và Setters
+    // Constructor không tham số
+    public PatientsDTO() {
+    }
+
+    // Constructor có tham số
+    public PatientsDTO(Integer patientId, String email, String patientName, String phoneNumber,
+                       String address, String zipCode, String emergencyContact, String password,
+                       Double latitude, Double longitude, LocalDateTime createdAt,
+                       LocalDateTime updatedAt, Date patientDob, String patientGender,
+                       String patientCode, String patientImg) {
+        this.patientId = patientId;
+        this.email = email;
+        this.patientName = patientName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.zipCode = zipCode;
+        this.emergencyContact = emergencyContact;
+        this.password = password;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.patientDob = patientDob;
+        this.patientGender = patientGender;
+        this.patientCode = patientCode;
+        this.patientImg = patientImg;
+    }
+
     public Integer getPatientId() {
         return patientId;
     }
@@ -75,6 +104,14 @@ public class PatientsDTO {
 
     public void setEmergencyContact(String emergencyContact) {
         this.emergencyContact = emergencyContact;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Double getLatitude() {

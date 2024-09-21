@@ -6,41 +6,36 @@ public class HospitalDTO {
     private Integer hospitalId;
     private String hospitalName;
     private String address;
+    private Integer cityId; // Chỉ lưu trữ ID của City
     private String phoneNumber;
-    private Integer cityId; // Chỉ bao gồm ID của City để tránh vòng lặp
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String zipCode;
-    // Getters và Setters
-    private Double latitude; // Thêm trường này
+    private Double latitude;
     private Double longitude;
 
-    public Double getLongitude() {
-        return longitude;
-    }
+    // Constructor không tham số
+    public HospitalDTO() {}
 
-    public void setLongitude(Double longitude) {
+    // Constructor có tham số
+    public HospitalDTO(Integer hospitalId, String hospitalName, String address, Integer cityId,
+                       String phoneNumber, LocalDateTime createdAt, LocalDateTime updatedAt,
+                       String zipCode, Double latitude, Double longitude) {
+        this.hospitalId = hospitalId;
+        this.hospitalName = hospitalName;
+        this.address = address;
+        this.cityId = cityId;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.zipCode = zipCode;
+        this.latitude = latitude;
         this.longitude = longitude;
     }
 
-    public Double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
-
+    // Getters và Setters cho từng trường
     public Integer getHospitalId() {
         return hospitalId;
-    }
-
-    public String getZipCode() {
-        return zipCode;
-    }
-
-    public void setZipCode(String zipCode) {
-        this.zipCode = zipCode;
     }
 
     public void setHospitalId(Integer hospitalId) {
@@ -63,20 +58,20 @@ public class HospitalDTO {
         this.address = address;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     public Integer getCityId() {
         return cityId;
     }
 
     public void setCityId(Integer cityId) {
         this.cityId = cityId;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -93,5 +88,29 @@ public class HospitalDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

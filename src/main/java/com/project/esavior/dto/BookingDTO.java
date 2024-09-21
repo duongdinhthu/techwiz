@@ -3,18 +3,54 @@ package com.project.esavior.dto;
 import java.time.LocalDateTime;
 
 public class BookingDTO {
+
     private Integer bookingId;
-    private Integer patientId;  // Thêm patientId vào DTO
+    private Integer ambulanceId; // ID của Ambulance
+    private Integer patientId;   // ID của Patient
+    private Integer hospitalId;  // ID của Hospital
+    private Integer driverId;    // ID của Driver
+
+    private Double latitude;
+    private Double longitude;
+
+    private Double destinationLatitude;
+    private Double destinationLongitude;
+
+    private String bookingType;
     private String pickupAddress;
     private LocalDateTime pickupTime;
     private String bookingStatus;
-    private double latitude;
-    private double longitude;
-    private double destinationLatitude;
-    private double destinationLongitude;
-    private double cost;
-    private String bookingType;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Double cost;
+    private String ambulanceType;
+    private String zipCode;
 
+
+
+    // Constructor không tham số
+    public BookingDTO() {}
+
+    public BookingDTO(Integer bookingId, Integer ambulanceId, Integer patientId, Integer hospitalId, Integer driverId, Double latitude, Double longitude, Double destinationLatitude, Double destinationLongitude, String bookingType, String pickupAddress, LocalDateTime pickupTime, String bookingStatus, LocalDateTime createdAt, LocalDateTime updatedAt, Double cost, String ambulanceType, String zipCode) {
+        this.bookingId = bookingId;
+        this.ambulanceId = ambulanceId;
+        this.patientId = patientId;
+        this.hospitalId = hospitalId;
+        this.driverId = driverId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongitude = destinationLongitude;
+        this.bookingType = bookingType;
+        this.pickupAddress = pickupAddress;
+        this.pickupTime = pickupTime;
+        this.bookingStatus = bookingStatus;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.cost = cost;
+        this.ambulanceType = ambulanceType;
+        this.zipCode = zipCode;
+    }
 
     public Integer getBookingId() {
         return bookingId;
@@ -24,12 +60,76 @@ public class BookingDTO {
         this.bookingId = bookingId;
     }
 
+    public Integer getAmbulanceId() {
+        return ambulanceId;
+    }
+
+    public void setAmbulanceId(Integer ambulanceId) {
+        this.ambulanceId = ambulanceId;
+    }
+
     public Integer getPatientId() {
         return patientId;
     }
 
     public void setPatientId(Integer patientId) {
         this.patientId = patientId;
+    }
+
+    public Integer getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(Integer hospitalId) {
+        this.hospitalId = hospitalId;
+    }
+
+    public Integer getDriverId() {
+        return driverId;
+    }
+
+    public void setDriverId(Integer driverId) {
+        this.driverId = driverId;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getDestinationLatitude() {
+        return destinationLatitude;
+    }
+
+    public void setDestinationLatitude(Double destinationLatitude) {
+        this.destinationLatitude = destinationLatitude;
+    }
+
+    public Double getDestinationLongitude() {
+        return destinationLongitude;
+    }
+
+    public void setDestinationLongitude(Double destinationLongitude) {
+        this.destinationLongitude = destinationLongitude;
+    }
+
+    public String getBookingType() {
+        return bookingType;
+    }
+
+    public void setBookingType(String bookingType) {
+        this.bookingType = bookingType;
     }
 
     public String getPickupAddress() {
@@ -56,52 +156,43 @@ public class BookingDTO {
         this.bookingStatus = bookingStatus;
     }
 
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getDestinationLatitude() {
-        return destinationLatitude;
-    }
-
-    public void setDestinationLatitude(double destinationLatitude) {
-        this.destinationLatitude = destinationLatitude;
-    }
-
-    public double getDestinationLongitude() {
-        return destinationLongitude;
-    }
-
-    public void setDestinationLongitude(double destinationLongitude) {
-        this.destinationLongitude = destinationLongitude;
-    }
-
-    public double getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
-    public String getBookingType() {
-        return bookingType;
+    public String getAmbulanceType() {
+        return ambulanceType;
     }
 
-    public void setBookingType(String bookingType) {
-        this.bookingType = bookingType;
+    public void setAmbulanceType(String ambulanceType) {
+        this.ambulanceType = ambulanceType;
     }
-// Getters và setters
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

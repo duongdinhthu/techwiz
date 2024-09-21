@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,9 +38,9 @@ public class DriverController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.singletonMap("success", false));
         }
-
-
     }
+
+    // Chuyển đổi từ Driver entity sang DTO
     public DriverDTO convertToDTO(Driver driver) {
         DriverDTO dto = new DriverDTO();
         dto.setDriverId(driver.getDriverId());
@@ -60,17 +59,22 @@ public class DriverController {
         return dto;
     }
 
+    // Lấy danh sách tài xế
     @GetMapping("/all")
-    public List<Driver> getAllDrivers() {
-        return driverService.getAllDrivers();
+    public List<DriverDTO> getAllDrivers() {
+        List<Driver> drivers = driverService.getAllDrivers();
+        return drivers.stream()
+                .map(this::convertToDTO)
+                .toList(); // Chuyển đổi sang DTO
     }
 
     // Quản lý tình trạng xe cứu thương
     @PutMapping("/{driverId}/status")
-    public ResponseEntity<Driver> updateDriverStatus(@PathVariable Integer driverId, @RequestParam String status) {
+    public ResponseEntity<DriverDTO> updateDriverStatus(@PathVariable Integer driverId, @RequestParam String status) {
         try {
             Driver updatedDriver = driverService.updateDriverStatus(driverId, status);
-            return ResponseEntity.ok(updatedDriver);
+            DriverDTO updatedDriverDTO = convertToDTO(updatedDriver); // Chuyển đổi sang DTO
+            return ResponseEntity.ok(updatedDriverDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -89,14 +93,17 @@ public class DriverController {
 
     // Cập nhật trạng thái xe cứu thương
     @PutMapping("/{driverId}/ambulance/status")
-    public ResponseEntity<Driver> updateAmbulanceStatus(@PathVariable Integer driverId, @RequestParam String status) {
+    public ResponseEntity<DriverDTO> updateAmbulanceStatus(@PathVariable Integer driverId, @RequestParam String status) {
         try {
             Driver updatedDriver = driverService.updateDriverStatus(driverId, status);
-            return ResponseEntity.ok(updatedDriver);
+            DriverDTO updatedDriverDTO = convertToDTO(updatedDriver); // Chuyển đổi sang DTO
+            return ResponseEntity.ok(updatedDriverDTO);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
+
+    // Tìm tài xế gần nhất
     @PostMapping("/nearest")
     public ResponseEntity<List<DriverDTO>> findNearestDrivers(@RequestBody Map<String, Double> location) {
         double latitude = location.get("latitude");
@@ -112,13 +119,10 @@ public class DriverController {
 
         // Chuyển đổi danh sách Driver thành danh sách DriverDTO với chỉ tên và số điện thoại
         List<DriverDTO> driverDTOs = nearestDrivers.stream()
-                .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(),driver.getDriverName() ))
+                .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(), driver.getDriverName()))
                 .toList();
 
         // Trả về danh sách DTO
-
         return ResponseEntity.ok(driverDTOs);
     }
-
-
 }

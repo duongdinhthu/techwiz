@@ -8,6 +8,13 @@ public class CityDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public CityDTO(Integer cityId, String cityName, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.cityId = cityId;
+        this.cityName = cityName;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     // Getters và Setters
     public Integer getCityId() {
         return cityId;

@@ -11,12 +11,13 @@ public class DriverDTO {
     private String status;
     private Double latitude;
     private Double longitude;
-    private Integer hospitalId; // Bao gồm ID của Hospital để tránh vòng lặp
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Integer hospitalId; // Chỉ lưu trữ ID của Hospital
+    private Integer ambulanceId; // Chỉ lưu trữ ID của Ambulance
 
-    public DriverDTO() {
-    }
+    // Constructor không tham số
+    public DriverDTO() {}
 
     public DriverDTO(Integer driverId, String driverName, String driverPhone) {
         this.driverId = driverId;
@@ -24,12 +25,25 @@ public class DriverDTO {
         this.driverPhone = driverPhone;
     }
 
-    public DriverDTO(String driverName, String driverPhone) {
+    // Constructor có tham số
+    public DriverDTO(Integer driverId, String driverName, String email, String driverPhone,
+                     String licenseNumber, String status, Double latitude, Double longitude,
+                     LocalDateTime createdAt, LocalDateTime updatedAt, Integer hospitalId, Integer ambulanceId) {
+        this.driverId = driverId;
         this.driverName = driverName;
+        this.email = email;
         this.driverPhone = driverPhone;
+        this.licenseNumber = licenseNumber;
+        this.status = status;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.hospitalId = hospitalId;
+        this.ambulanceId = ambulanceId;
     }
 
-    // Getters và Setters
+    // Getters và Setters cho từng trường
     public Integer getDriverId() {
         return driverId;
     }
@@ -94,14 +108,6 @@ public class DriverDTO {
         this.longitude = longitude;
     }
 
-    public Integer getHospitalId() {
-        return hospitalId;
-    }
-
-    public void setHospitalId(Integer hospitalId) {
-        this.hospitalId = hospitalId;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -116,5 +122,21 @@ public class DriverDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Integer getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(Integer hospitalId) {
+        this.hospitalId = hospitalId;
+    }
+
+    public Integer getAmbulanceId() {
+        return ambulanceId;
+    }
+
+    public void setAmbulanceId(Integer ambulanceId) {
+        this.ambulanceId = ambulanceId;
     }
 }

@@ -1,11 +1,15 @@
 package com.project.esavior.controller;
 
+import com.project.esavior.dto.AmbulanceDTO;
 import com.project.esavior.model.Ambulance;
 import com.project.esavior.service.AmbulanceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ambulances")
@@ -15,22 +19,50 @@ public class AmbulanceController {
     private AmbulanceService ambulanceService;
 
     @GetMapping
-    public List<Ambulance> getAllAmbulances() {
-        return ambulanceService.getAllAmbulances();
+    public List<AmbulanceDTO> getAllAmbulances() {
+        // Chuyển đổi danh sách Ambulance sang DTO trước khi trả về
+        return ambulanceService.getAllAmbulances().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public Ambulance getAmbulanceById(@PathVariable Integer id) {
-        return ambulanceService.getAmbulanceById(id);
+    public ResponseEntity<AmbulanceDTO> getAmbulanceById(@PathVariable Integer id) {
+        Ambulance ambulance = ambulanceService.getAmbulanceById(id);
+        if (ambulance != null) {
+            return new ResponseEntity<>(convertToDTO(ambulance), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping
-    public Ambulance createAmbulance(@RequestBody Ambulance ambulance) {
-        return ambulanceService.saveAmbulance(ambulance);
+    public ResponseEntity<String> createAmbulance(@RequestBody Ambulance ambulance) {
+        Ambulance createdAmbulance = ambulanceService.saveAmbulance(ambulance);
+        if (createdAmbulance != null) {
+            return new ResponseEntity<>("Ambulance created successfully", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Ambulance creation failed", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAmbulance(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteAmbulance(@PathVariable Integer id) {
         ambulanceService.deleteAmbulance(id);
+        return new ResponseEntity<>("Ambulance deleted successfully", HttpStatus.OK);
+    }
+
+    // Phương thức chuyển đổi từ Entity sang DTO
+    private AmbulanceDTO convertToDTO(Ambulance ambulance) {
+        return new AmbulanceDTO(
+                ambulance.getAmbulanceId(),
+                ambulance.getAmbulanceNumber(),
+                ambulance.getDriver() != null ? ambulance.getDriver().getDriverId() : null,
+                ambulance.getAmbulanceStatus(),
+                ambulance.getAmbulanceType(),
+                ambulance.getHospital() != null ? ambulance.getHospital().getHospitalId() : null,
+                ambulance.getCreatedAt(),
+                ambulance.getUpdatedAt()
+        );
     }
 }

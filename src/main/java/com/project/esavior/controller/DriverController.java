@@ -60,6 +60,17 @@ public class DriverController {
         }
     }
 
+    @PostMapping
+    public ResponseEntity<String> createDriver(@RequestBody Driver driver) {
+        Driver createdDriver = driverService.saveDriver(driver);
+        if (createdDriver != null) {
+            return new ResponseEntity<>("Driver created successfully", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Driver creation failed", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
     // Chuyển đổi từ Driver entity sang DTO
     public DriverDTO convertToDTO(Driver driver) {
         DriverDTO dto = new DriverDTO();

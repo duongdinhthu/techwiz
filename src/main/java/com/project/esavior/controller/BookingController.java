@@ -97,7 +97,7 @@ public class BookingController {
     public ResponseEntity<String> updateBookingStatus(@RequestBody Booking request) {
         try {
             boolean isUpdated = bookingService.updateBookingStatus(request.getBookingId(), request.getBookingStatus());
-
+            locationService.setBookingStatus(request.getBookingStatus());
             if (isUpdated) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Booking status updated successfully!");
             } else {

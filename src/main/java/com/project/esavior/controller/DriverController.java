@@ -204,22 +204,12 @@ public class DriverController {
         if (savedDriverId != null && savedDriverId.equals(driverId)) {
             // Lấy thông tin khách hàng và tọa độ từ LocationService
             Map<String, Object> customerAndLocationInfo = locationService.getCustomerAndLocationInfo();
-
-            // Kiểm tra nếu bookingStatus là "Pending"
-            String bookingStatus = (String) customerAndLocationInfo.get("bookingStatus");
-            if ("Pending".equals(bookingStatus)) {
-                // Nếu bookingStatus là "Pending", trả về thông tin khách hàng và tọa độ
-                return ResponseEntity.ok(customerAndLocationInfo);
-            } else {
-                // Nếu không phải "Pending", trả về no content
-                return ResponseEntity.noContent().build();
-            }
+            return ResponseEntity.ok(customerAndLocationInfo); // Trả về thông tin khách hàng và tọa độ
         } else {
-            // Nếu không tìm thấy driverId, trả về no content
+            // Nếu không tìm thấy, trả về no content
             return ResponseEntity.noContent().build();
         }
     }
-
     @GetMapping("/get-driver-location/{driverId}")
     public ResponseEntity<Location> getDriverLocation(@PathVariable Integer driverId) {
         Location location = locationService.getDriverLocation(driverId);

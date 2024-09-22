@@ -82,10 +82,9 @@ public class BookingService {
             booking.setHospital(updatedBooking.getHospital());
             booking.setBookingType(updatedBooking.getBookingType());
             booking.setPickupAddress(updatedBooking.getPickupAddress());
+            booking.setDriver(updatedBooking.getDriver());
             booking.setPickupTime(updatedBooking.getPickupTime());
-            booking.setBookingStatus(updatedBooking.getBookingStatus());
-            booking.setCreatedAt(updatedBooking.getCreatedAt());
-            booking.setUpdatedAt(updatedBooking.getUpdatedAt());
+            booking.setBookingStatus(updatedBooking.getBookingStatus());    
             return bookingRepository.save(booking);
         }).orElse(null);
     }

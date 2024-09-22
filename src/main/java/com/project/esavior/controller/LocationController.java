@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -20,6 +21,7 @@ public class LocationController {
     public ResponseEntity<String> updateLocation(@RequestBody Location location) {
         try {
             // Gọi service để lưu vị trí
+
             locationService.updateLocation(location);
             return new ResponseEntity<>("Location updated successfully", HttpStatus.OK);
         } catch (Exception e) {
@@ -36,5 +38,18 @@ public class LocationController {
         locationService.updateDriverLocation(driverId, location);
 
         return new ResponseEntity<>("Location updated successfully", HttpStatus.OK);
+    }
+    @GetMapping("/location")
+    public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestParam Integer driverId) {
+        Location location = locationService.getDriverLocation(driverId);
+
+        if (location != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("latitude", location.getLatitude());
+            response.put("longitude", location.getLongitude());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

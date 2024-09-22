@@ -90,6 +90,7 @@ public class DriverController {
         return dto;
     }
 
+
     // Lấy danh sách tài xế
     @GetMapping("/all")
     public List<DriverDTO> getAllDrivers() {
@@ -241,6 +242,39 @@ public class DriverController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @PutMapping("/{driverId}")
+    public ResponseEntity<DriverDTO> updateDriver(@PathVariable Integer driverId, @RequestBody DriverDTO driverDTO) {
+        try {
+            // Lấy thông tin tài xế hiện tại từ database
+            Optional<Driver> existingDriver = driverService.findDriverById(driverId);
+
+            if (existingDriver.isPresent()) {
+                Driver driverToUpdate = existingDriver.get();
+
+                // Cập nhật các trường khác (không cập nhật latitude, longitude)
+                driverToUpdate.setDriverName(driverDTO.getDriverName());
+                driverToUpdate.setDriverPhone(driverDTO.getDriverPhone());
+                driverToUpdate.setEmail(driverDTO.getEmail());
+                driverToUpdate.setLicenseNumber(driverDTO.getLicenseNumber());
+                driverToUpdate.setStatus(driverDTO.getStatus());
+
+                // Lưu lại thông tin đã cập nhật
+                Driver updatedDriver = driverService.saveDriver(driverToUpdate);
+
+                // Chuyển đổi từ Driver entity sang DTO
+                DriverDTO updatedDriverDTO = convertToDTO(updatedDriver);
+
+                // Trả về thông tin tài xế đã cập nhật
+                return ResponseEntity.ok(updatedDriverDTO);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 //    @PostMapping("/nearest")

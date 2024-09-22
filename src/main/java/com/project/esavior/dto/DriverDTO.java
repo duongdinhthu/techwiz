@@ -27,6 +27,15 @@ public class DriverDTO {
         this.latitude = latitude;
     }
 
+    public DriverDTO(Integer driverId, String driverName, String email, String driverPhone, String licenseNumber, String status) {
+        this.driverId = driverId;
+        this.driverName = driverName;
+        this.email = email;
+        this.driverPhone = driverPhone;
+        this.licenseNumber = licenseNumber;
+        this.status = status;
+    }
+
     // Constructor có tham số
     public DriverDTO(Integer driverId, String driverName, String email, String driverPhone,
                      String licenseNumber, String status, Double latitude, Double longitude,

@@ -208,6 +208,29 @@ public class DriverController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/{driverId}")
+    public ResponseEntity<DriverDTO> getDriverById(@PathVariable Integer driverId) {
+        Optional<Driver> driver = driverService.findDriverById(driverId);
+
+        if (driver.isPresent()) {
+            Driver foundDriver = driver.get();
+
+            // Chuyển đổi từ Driver sang DriverDTO
+            DriverDTO driverDTO = new DriverDTO(
+                    foundDriver.getDriverId(),
+                    foundDriver.getDriverName(),
+                    foundDriver.getDriverPhone(),
+                    foundDriver.getDriverName(),
+                    foundDriver.getLicenseNumber(),
+                    foundDriver.getStatus()
+            );
+
+            return new ResponseEntity<>(driverDTO, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 //    @PostMapping("/nearest")
 //    public ResponseEntity<List<DriverDTO>> findNearestDrivers(@RequestBody Map<String, Double> location) {

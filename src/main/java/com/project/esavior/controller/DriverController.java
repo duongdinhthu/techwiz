@@ -77,6 +77,7 @@ public class DriverController {
         dto.setDriverId(driver.getDriverId());
         dto.setDriverName(driver.getDriverName());
         dto.setEmail(driver.getEmail());
+        dto.setPassword(driver.getPassword());
         dto.setDriverPhone(driver.getDriverPhone());
         dto.setLicenseNumber(driver.getLicenseNumber());
         dto.setStatus(driver.getStatus());
@@ -232,7 +233,7 @@ public class DriverController {
                     foundDriver.getDriverId(),
                     foundDriver.getDriverName(),
                     foundDriver.getDriverPhone(),
-                    foundDriver.getDriverName(),
+                    foundDriver.getEmail(),
                     foundDriver.getLicenseNumber(),
                     foundDriver.getStatus()
             );
@@ -256,6 +257,7 @@ public class DriverController {
                 driverToUpdate.setDriverName(driverDTO.getDriverName());
                 driverToUpdate.setDriverPhone(driverDTO.getDriverPhone());
                 driverToUpdate.setEmail(driverDTO.getEmail());
+                driverToUpdate.setPassword(driverDTO.getPassword());
                 driverToUpdate.setLicenseNumber(driverDTO.getLicenseNumber());
                 driverToUpdate.setStatus(driverDTO.getStatus());
 

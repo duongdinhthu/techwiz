@@ -6,6 +6,7 @@ public class DriverDTO {
     private Integer driverId;
     private String driverName;
     private String email;
+    private String password;
     private String driverPhone;
     private String licenseNumber;
     private String status;
@@ -19,12 +20,13 @@ public class DriverDTO {
     // Constructor không tham số
     public DriverDTO() {}
 
-    public DriverDTO(Integer driverId, String driverName, String driverPhone, Double longitude, Double latitude) {
+    public DriverDTO(Integer driverId, String driverName, String driverPhone, Double longitude, Double latitude, String password) {
         this.driverId = driverId;
         this.driverName = driverName;
         this.driverPhone = driverPhone;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.password = password;
     }
 
     public DriverDTO(Integer driverId, String driverName, String email, String driverPhone, String licenseNumber, String status) {
@@ -54,7 +56,20 @@ public class DriverDTO {
         this.ambulanceId = ambulanceId;
     }
 
+    public DriverDTO(Integer driverId, String driverPhone, String driverName, Double longitude, Double latitude) {
+    }
+
     // Getters và Setters cho từng trường
+
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Integer getDriverId() {
         return driverId;
     }

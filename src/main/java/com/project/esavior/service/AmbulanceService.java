@@ -28,4 +28,8 @@ public class AmbulanceService {
     public void deleteAmbulance(Integer id) {
         ambulanceRepository.deleteById(id);
     }
+
+    public List<Ambulance> getAmbulancesByDriverId(Integer driverId) {
+        return ambulanceRepository.findAmbulanceByDriverDriverId(driverId);
+    }
 }

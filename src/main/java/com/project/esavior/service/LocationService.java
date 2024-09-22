@@ -16,9 +16,9 @@ public class LocationService {
     private Integer driverId; // Lưu driverId cho tài xế
     private double destinationLatitude;  // Vĩ độ điểm đến
     private double destinationLongitude;
-
+    private String bookingStatus;
     // Cập nhật vị trí và thông tin khách hàng bao gồm điểm đến
-    public void updateLocationAndCustomerInfo(Location location, String customerName, String phoneNumber, String email, double destinationLatitude, double destinationLongitude) {
+    public void updateLocationAndCustomerInfo(Location location, String customerName, String phoneNumber, String email, double destinationLatitude, double destinationLongitude,String bookingStatus) {
         this.latitude = location.getLatitude();
         this.longitude = location.getLongitude();
         this.customerName = customerName;
@@ -26,6 +26,7 @@ public class LocationService {
         this.email = email;
         this.destinationLatitude = destinationLatitude;
         this.destinationLongitude = destinationLongitude;
+        this.bookingStatus = bookingStatus;
     }
     public void updateLocation(Location location) {
         this.latitude = location.getLatitude();
@@ -48,6 +49,14 @@ public class LocationService {
 
     public void updateDriverId(Integer driverId) {
         this.driverId = driverId;
+    }
+
+    public String getBookingStatus() {
+        return bookingStatus;
+    }
+
+    public void setBookingStatus(String bookingStatus) {
+        this.bookingStatus = bookingStatus;
     }
 
     public Integer getDriverId() {

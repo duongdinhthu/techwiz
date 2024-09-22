@@ -75,7 +75,8 @@ public class BookingController {
                 patientOpt.get().getPhoneNumber(), // Số điện thoại khách hàng
                 patientOpt.get().getEmail(), // Email khách hàng
                 bookingRequest.getDestinationLatitude(), // Latitude điểm đến
-                bookingRequest.getDestinationLongitude()  // Longitude điểm đến
+                bookingRequest.getDestinationLongitude(),
+                bookingRequest.getBookingStatus()// Longitude điểm đến
         );
 
         // Lưu booking mới

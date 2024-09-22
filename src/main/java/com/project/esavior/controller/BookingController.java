@@ -69,7 +69,6 @@ public class BookingController {
         newBooking.setAmbulanceType(bookingRequest.getAmbulanceType());
 
         // Cập nhật thông tin vị trí và khách hàng vào LocationService
-        // Lưu thông tin vị trí và khách hàng vào LocationService
         locationService.updateLocationAndCustomerInfo(
                 new Location(bookingRequest.getLatitude(), bookingRequest.getLongitude()), // Truyền đúng đối tượng Location
                 patientOpt.get().getPatientName(), // Tên khách hàng
@@ -85,11 +84,28 @@ public class BookingController {
         // Chuyển đổi Booking thành BookingDTO
         BookingDTO bookingDTO = convertToDTO(savedBooking);
 
+        // Đảm bảo bookingId được set trong BookingDTO
+        bookingDTO.setBookingId(savedBooking.getBookingId());
+
         // Trả về bookingDTO đã lưu kèm theo ID
         return new ResponseEntity<>(bookingDTO, HttpStatus.CREATED);
     }
 
 
+    @PostMapping("/update-status")
+    public ResponseEntity<String> updateBookingStatus(@RequestBody Booking request) {
+        try {
+            boolean isUpdated = bookingService.updateBookingStatus(request.getBookingId(), request.getBookingStatus());
+
+            if (isUpdated) {
+                return ResponseEntity.status(HttpStatus.CREATED).body("Booking status updated successfully!");
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update booking status.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating booking status.");
+        }
+    }
 
 
     @PostMapping("/non-emergency")

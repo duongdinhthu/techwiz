@@ -7,6 +7,7 @@ import com.project.esavior.repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -112,6 +113,18 @@ public class BookingService {
         booking.setLongitude(longitude);
 
         bookingRepository.save(booking);
+    }
+    public boolean updateBookingStatus(Integer bookingId, String status) {
+        Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
+        if (optionalBooking.isPresent()) {
+            Booking booking = optionalBooking.get();
+            booking.setBookingStatus(status);  // Cập nhật trạng thái mới
+            booking.setUpdatedAt(LocalDateTime.now());  // Cập nhật thời gian cập nhật
+            bookingRepository.save(booking);  // Lưu thay đổi vào cơ sở dữ liệu
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

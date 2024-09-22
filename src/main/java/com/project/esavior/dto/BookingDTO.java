@@ -27,6 +27,8 @@ public class BookingDTO {
     private String zipCode;
     private String patientName;   // Thêm trường này để chứa tên bệnh nhân
     private String patientPhone;
+    private String patientUsername;
+
     public BookingDTO(Integer patientId, Double latitude, Double longitude, Double destinationLatitude, Double destinationLongitude, String bookingType, String bookingStatus, Double cost) {
         this.patientId = patientId;
         this.latitude = latitude;
@@ -36,6 +38,38 @@ public class BookingDTO {
         this.bookingType = bookingType;
         this.bookingStatus = bookingStatus;
         this.cost = cost;
+    }
+
+    public BookingDTO(Integer bookingId, Integer ambulanceId, Integer patientId, Integer hospitalId, Integer driverId, Double latitude, Double longitude, Double destinationLatitude, Double destinationLongitude, String bookingType, String pickupAddress, LocalDateTime pickupTime, String bookingStatus, LocalDateTime createdAt, LocalDateTime updatedAt, Double cost, String ambulanceType, String zipCode, String patientName, String patientPhone, String patientUsername) {
+        this.bookingId = bookingId;
+        this.ambulanceId = ambulanceId;
+        this.patientId = patientId;
+        this.hospitalId = hospitalId;
+        this.driverId = driverId;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.destinationLatitude = destinationLatitude;
+        this.destinationLongitude = destinationLongitude;
+        this.bookingType = bookingType;
+        this.pickupAddress = pickupAddress;
+        this.pickupTime = pickupTime;
+        this.bookingStatus = bookingStatus;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.cost = cost;
+        this.ambulanceType = ambulanceType;
+        this.zipCode = zipCode;
+        this.patientName = patientName;
+        this.patientPhone = patientPhone;
+        this.patientUsername = patientUsername;
+    }
+
+    public String getPatientUsername() {
+        return patientUsername;
+    }
+
+    public void setPatientUsername(String patientUsername) {
+        this.patientUsername = patientUsername;
     }
 
     public BookingDTO(Double latitude, Double longitude, Double destinationLatitude, Double destinationLongitude, String pickupAddress, String patientName, String patientPhone) {

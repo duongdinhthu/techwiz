@@ -63,9 +63,19 @@ public class Patients {
 
     @Column(name = "patient_img")
     private String patientImg; // Đường dẫn ảnh bệnh nhân
+    @Column(name = "patient_username ")
+    private String patientUsername;
 
     // Constructors, Getters và Setters
     public Patients() {
+    }
+
+    public String getPatientUsername() {
+        return patientUsername;
+    }
+
+    public void setPatientUsername(String patientUsername) {
+        this.patientUsername = patientUsername;
     }
 
     public String getPatientAddress() {

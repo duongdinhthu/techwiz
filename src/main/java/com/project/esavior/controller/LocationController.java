@@ -41,6 +41,7 @@ public class LocationController {
     }
     @GetMapping("/location")
     public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestParam Integer driverId) {
+        System.out.println("Received driverId: " + driverId);  // In driverId ra log
         Location location = locationService.getDriverLocation(driverId);
 
         if (location != null) {
@@ -49,7 +50,9 @@ public class LocationController {
             response.put("longitude", location.getLongitude());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
+            System.out.println("No location found for driverId: " + driverId);  // Ghi log nếu không tìm thấy vị trí
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }

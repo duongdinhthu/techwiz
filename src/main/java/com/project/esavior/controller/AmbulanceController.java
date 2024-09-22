@@ -52,6 +52,22 @@ public class AmbulanceController {
         return new ResponseEntity<>("Ambulance deleted successfully", HttpStatus.OK);
     }
 
+    @GetMapping("/driver/{driverId}")
+    public ResponseEntity<List<AmbulanceDTO>> getAmbulancesByDriverId(@PathVariable Integer driverId) {
+        List<Ambulance> ambulances = ambulanceService.getAmbulancesByDriverId(driverId);
+
+        if (!ambulances.isEmpty()) {
+            // Chuyển đổi danh sách ambulances sang DTO
+            List<AmbulanceDTO> ambulanceDTOs = ambulances.stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(ambulanceDTOs, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     // Phương thức chuyển đổi từ Entity sang DTO
     private AmbulanceDTO convertToDTO(Ambulance ambulance) {
         return new AmbulanceDTO(

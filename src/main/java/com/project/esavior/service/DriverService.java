@@ -72,4 +72,9 @@ public class DriverService {
     public Driver save(Driver driver) {
         return driverRepository.save(driver);
     }
+
+    public Driver saveDriver(Driver driver) {
+        return driverRepository.save(driver);
+    }
+
 }

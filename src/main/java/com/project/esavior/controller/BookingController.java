@@ -59,7 +59,7 @@ public class BookingController {
         // Tạo mới booking
         Booking newBooking = new Booking();
         newBooking.setPatient(patientOpt.get());
-        newBooking.setBookingType("Provide");
+        newBooking.setBookingType("Emergency");
         newBooking.setPickupAddress(bookingRequest.getPickupAddress());
         newBooking.setPickupTime(LocalDateTime.now());
         newBooking.setBookingStatus("Pending");

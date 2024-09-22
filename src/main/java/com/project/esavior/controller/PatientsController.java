@@ -26,8 +26,14 @@ public class PatientsController {
     // Đăng ký bệnh nhân mới
     @PostMapping("/register")
     public ResponseEntity<PatientsDTO> registerPatient(@RequestBody Patients patient) {
+        // Kiểm tra các trường hợp đăng ký hợp lệ (nếu cần)
+
+        // Đăng ký bệnh nhân
         Patients registeredPatient = patientsService.registerPatient(patient);
+
+        // Chuyển đổi sang DTO để phản hồi
         PatientsDTO patientDTO = convertToDTO(registeredPatient);
+
         return new ResponseEntity<>(patientDTO, HttpStatus.CREATED);
     }
 

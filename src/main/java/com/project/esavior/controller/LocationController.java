@@ -35,43 +35,35 @@ public class LocationController {
         Double longitude = (Double) request.get("longitude");
 
         Location location = new Location(latitude, longitude);
-        locationService.updateDriverLocation(driverId, location);
+        locationService.updateDriverLocation(driverId, location);  // Cập nhật vị trí tài xế
+        System.out.println("Updating location for driverId: " + driverId + " with lat: " + latitude + ", long: " + longitude);
 
         return new ResponseEntity<>("Location updated successfully", HttpStatus.OK);
     }
-    @GetMapping("location")
-    public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestParam Integer driverId) {
-        // Lấy vị trí của tài xế từ service
-        Location location = locationService.getDriverLocation(driverId);
-
-        // Nếu vị trí tồn tại
-        if (location != null) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("latitude", location.getLatitude());
-            response.put("longitude", location.getLongitude());
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        } else {
-            // Nếu không tìm thấy vị trí của tài xế
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
     @PostMapping("/location")
     public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestBody Driver request) {
-        // Lấy driverId từ request body
         Integer driverId = request.getDriverId();
+        Location location = locationService.getDriverLocation(driverId);  // Lấy vị trí tài xế
 
-        // Lấy vị trí của tài xế từ service
-        Location location = locationService.getDriverLocation(driverId);
-
-        // Nếu vị trí tồn tại
         if (location != null) {
             Map<String, Object> response = new HashMap<>();
             response.put("latitude", location.getLatitude());
             response.put("longitude", location.getLongitude());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
-            // Nếu không tìm thấy vị trí của tài xế
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @GetMapping("/get-driver-location/{driverId}")
+    public ResponseEntity<Location> getDriverLocation(@PathVariable Integer driverId) {
+        Location location = locationService.getDriverLocation(driverId);
+        if (location != null) {
+            System.out.println("Returning location for driverId: " + driverId);
+            return new ResponseEntity<>(location, HttpStatus.OK);
+        } else {
+            System.out.println("No location found for driverId: " + driverId);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

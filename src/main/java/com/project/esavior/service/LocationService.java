@@ -50,6 +50,14 @@ public class LocationService {
     public void updateDriverId(Integer driverId) {
         this.driverId = driverId;
     }
+    public void updateDriverLocation(int driverId, Location location) {
+        driverLocations.put(driverId, location);
+        System.out.println("Driver location updated in service for driverId: " + driverId);
+    }
+
+    public Location getDriverLocation(int driverId) {
+        return driverLocations.get(driverId);
+    }
 
     public String getBookingStatus() {
         return bookingStatus;
@@ -65,12 +73,5 @@ public class LocationService {
     private Map<Integer, Location> driverLocations = new HashMap<>();
 
     // Cập nhật vị trí của tài xế
-    public void updateDriverLocation(int driverId, Location location) {
-        driverLocations.put(driverId, location);
-    }
 
-    // Lấy vị trí hiện tại của tài xế
-    public Location getDriverLocation(int driverId) {
-        return driverLocations.get(driverId);
-    }
 }

@@ -1,5 +1,6 @@
 package com.project.esavior.controller;
 
+import com.project.esavior.model.Driver;
 import com.project.esavior.model.Location;
 import com.project.esavior.service.LocationService; // Service để xử lý logic
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,17 +39,41 @@ public class LocationController {
 
         return new ResponseEntity<>("Location updated successfully", HttpStatus.OK);
     }
-    @GetMapping("/location")
+    @GetMapping("/api/locations/location")
     public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestParam Integer driverId) {
+        // Lấy vị trí của tài xế từ service
         Location location = locationService.getDriverLocation(driverId);
 
+        // Nếu vị trí tồn tại
         if (location != null) {
             Map<String, Object> response = new HashMap<>();
             response.put("latitude", location.getLatitude());
             response.put("longitude", location.getLongitude());
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
+            // Nếu không tìm thấy vị trí của tài xế
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @PostMapping("/location")
+    public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestBody Driver request) {
+        // Lấy driverId từ request body
+        Integer driverId = request.getDriverId();
+
+        // Lấy vị trí của tài xế từ service
+        Location location = locationService.getDriverLocation(driverId);
+
+        // Nếu vị trí tồn tại
+        if (location != null) {
+            Map<String, Object> response = new HashMap<>();
+            response.put("latitude", location.getLatitude());
+            response.put("longitude", location.getLongitude());
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } else {
+            // Nếu không tìm thấy vị trí của tài xế
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

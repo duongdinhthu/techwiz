@@ -20,13 +20,13 @@ public class DriverDTO {
     // Constructor không tham số
     public DriverDTO() {}
 
-    public DriverDTO(Integer driverId, String driverName, String driverPhone, Double longitude, Double latitude, String password) {
+    public DriverDTO(Integer driverId, String driverName, String driverPhone, Double longitude, Double latitude, String status) {
         this.driverId = driverId;
         this.driverName = driverName;
         this.driverPhone = driverPhone;
         this.longitude = longitude;
         this.latitude = latitude;
-        this.password = password;
+        this.status = status;
     }
 
     public DriverDTO(Integer driverId, String driverName, String email, String driverPhone, String licenseNumber, String status) {
@@ -34,7 +34,6 @@ public class DriverDTO {
         this.driverName = driverName;
         this.email = email;
         this.driverPhone = driverPhone;
-        this.licenseNumber = licenseNumber;
         this.status = status;
     }
 

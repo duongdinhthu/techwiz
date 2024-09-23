@@ -151,8 +151,16 @@ public class DriverController {
         }
 
         // Chuyển đổi danh sách Driver thành danh sách DriverDTO
+
         List<DriverDTO> driverDTOs = nearestDrivers.stream()
-                .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(), driver.getDriverName(), driver.getLongitude(), driver.getLatitude()))
+                .map(driver -> new DriverDTO(
+                        driver.getDriverId(),
+                        driver.getDriverName(),
+                        driver.getDriverPhone(),
+                        driver.getLatitude(),
+                        driver.getLongitude(),
+                        driver.getStatus()
+                        ))
                 .toList();
 
         // Lấy tài xế đầu tiên trong danh sách gần nhất

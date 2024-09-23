@@ -34,7 +34,9 @@ public class LocationController {
         Double latitude = (Double) request.get("latitude");
         Double longitude = (Double) request.get("longitude");
 
-        Location location = new Location(latitude, longitude);
+        Location location = new Location();
+        location.setDriverLatitude(latitude);
+        location.setDriverLongitude(longitude);
         locationService.updateDriverLocation(driverId, location);  // Cập nhật vị trí tài xế
         System.out.println("Updating location for driverId: " + driverId + " with lat: " + latitude + ", long: " + longitude);
 

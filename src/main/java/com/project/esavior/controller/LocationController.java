@@ -39,7 +39,7 @@ public class LocationController {
 
         return new ResponseEntity<>("Location updated successfully", HttpStatus.OK);
     }
-    @GetMapping("/api/locations/location")
+    @GetMapping("location")
     public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestParam Integer driverId) {
         // Lấy vị trí của tài xế từ service
         Location location = locationService.getDriverLocation(driverId);
@@ -74,6 +74,4 @@ public class LocationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 }

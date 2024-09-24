@@ -21,6 +21,7 @@ public class PatientsService {
         return patientsRepository.save(patient);
     }
 
+
     public Optional<Patients> getPatientProfile(Integer id) {
         return patientsRepository.findById(id);
     }

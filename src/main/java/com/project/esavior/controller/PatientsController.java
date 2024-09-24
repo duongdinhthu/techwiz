@@ -85,17 +85,25 @@ public class PatientsController {
 
     // Cập nhật thông tin bệnh nhân nếu email đã tồn tại
     @PutMapping("/update")
-    public ResponseEntity<String> updatePatient(@RequestBody Patients patient) {
+    public ResponseEntity<PatientsDTO> updatePatient(@RequestBody Patients patient) {
         Optional<Patients> existingPatient = patientsService.findByEmail(patient.getEmail());
         if (existingPatient.isPresent()) {
             Patients updatePatient = existingPatient.get();
             updatePatient.setPatientName(patient.getPatientName());
             updatePatient.setPhoneNumber(patient.getPhoneNumber());
+
+            // Lưu bệnh nhân đã cập nhật
             patientsService.save(updatePatient);
-            return new ResponseEntity<>("Cập nhật thông tin thành công", HttpStatus.OK);
+
+            // Chuyển đổi Patients thành PatientsDTO để trả về
+            PatientsDTO patientDTO = convertToDTO(updatePatient);
+
+            return new ResponseEntity<>(patientDTO, HttpStatus.OK);
         }
-        return new ResponseEntity<>("Bệnh nhân không tồn tại", HttpStatus.NOT_FOUND);
+        // Nếu bệnh nhân không tồn tại, trả về lỗi 404
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
 
     // Phương thức chuyển đổi từ entity sang DTO
     private PatientsDTO convertToDTO(Patients patient) {

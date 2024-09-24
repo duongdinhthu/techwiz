@@ -70,5 +70,4 @@ public class PatientLocationController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 }

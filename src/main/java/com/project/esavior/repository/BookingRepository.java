@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking, Integer> {
     // Tìm kiếm chi tiết đặt chỗ theo tên bệnh viện
     List<Booking> findByHospital_HospitalName(String hospitalName);
+    List<Booking> findByDriver_DriverIdAndBookingStatus(Integer driverId, String bookingStatus);
 
     List<Booking> findByDriver_DriverId(Integer driverId);
 

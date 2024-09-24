@@ -2,43 +2,34 @@ package com.project.esavior.controller;
 
 import com.project.esavior.dto.BookingDTO;
 import com.project.esavior.dto.DriverDTO;
-import com.project.esavior.model.Booking;
-import com.project.esavior.model.Driver;
-import com.project.esavior.model.Location;
-import com.project.esavior.model.Patients;
-import com.project.esavior.service.BookingService;
-import com.project.esavior.service.DriverService;
+import com.project.esavior.model.*;
+import com.project.esavior.service.*;
 
-import com.project.esavior.service.LocationService;
-import com.project.esavior.service.PatientsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketSession;
+
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/drivers")
 public class DriverController {
 
+    private final DriverLocationService driverLocationService;
     private DriverService driverService;
     private BookingService bookingService;
-    private LocationService locationService;
+    private PatientLocationService patientLocationService;
     private PatientsService patientsService;
-    public DriverController(LocationService locationService,BookingService bookingService,DriverService driverService,PatientsService patientsService) {
-        this.locationService = locationService;
-        this.bookingService = bookingService;
+
+    public DriverController(DriverLocationService driverLocationService, DriverService driverService, BookingService bookingService, PatientLocationService patientLocationService, PatientsService patientsService) {
+        this.driverLocationService = driverLocationService;
         this.driverService = driverService;
+        this.bookingService = bookingService;
+        this.patientLocationService = patientLocationService;
         this.patientsService = patientsService;
     }
-
 
     // Đăng nhập tài xế
     @PostMapping("/login")
@@ -185,7 +176,6 @@ public class DriverController {
         Driver nearestDriver = nearestDrivers.get(0);
 
         // Lưu driverId vào LocationService
-        locationService.updateDriverId(nearestDriver.getDriverId());
 
         // Cập nhật booking với driverId và vị trí khách hàng
         bookingService.saveBookingForDriver(nearestDriver.getDriverId(), latitude, longitude);
@@ -225,13 +215,16 @@ public class DriverController {
     }
     @GetMapping("/check-driver/{driverId}")
     public ResponseEntity<Map<String, Object>> checkDriverBooking(@PathVariable Integer driverId) {
-        // Lấy driverId hiện tại từ LocationService
-        Integer savedDriverId = locationService.getDriverId();
+        // Lấy danh sách các booking có trạng thái "Pending" của driver
+        List<Booking> pendingBookings = bookingService.getPendingBookingsByDriverId(driverId);
 
-        // Kiểm tra nếu driverId khớp với driverId đã lưu
-        if (savedDriverId != null && savedDriverId.equals(driverId)) {
-            // Lấy thông tin khách hàng và tọa độ từ LocationService
-            Map<String, Object> customerAndLocationInfo = locationService.getCustomerAndLocationInfo();
+        if (!pendingBookings.isEmpty()) {
+            // Lấy booking đầu tiên trong danh sách nếu tồn tại
+            Booking booking = pendingBookings.get(0);
+
+            // Lấy thông tin khách hàng và tọa độ từ `PatientLocationService`
+            Map<String, Object> customerAndLocationInfo = patientLocationService.getPatientAndLocationInfo(booking.getPatient().getPatientId());
+
             return ResponseEntity.ok(customerAndLocationInfo); // Trả về thông tin khách hàng và tọa độ
         } else {
             // Nếu không tìm thấy, trả về no content
@@ -243,11 +236,15 @@ public class DriverController {
 
 
 
+
+
+
+
     @GetMapping("/get-driver-location/{driverId}")
-    public ResponseEntity<Location> getDriverLocation(@PathVariable Integer driverId) {
-        Location location = locationService.getDriverLocation(driverId);
-        if (location != null) {
-            return new ResponseEntity<>(location, HttpStatus.OK);
+    public ResponseEntity<DriverLocation> getDriverLocation(@PathVariable Integer driverId) {
+        DriverLocation driverLocation = driverLocationService.getDriverLocation(driverId);
+        if (driverLocation != null) {
+            return new ResponseEntity<>(driverLocation, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

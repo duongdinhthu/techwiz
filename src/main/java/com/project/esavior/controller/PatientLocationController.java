@@ -1,8 +1,10 @@
 package com.project.esavior.controller;
 
 import com.project.esavior.model.Driver;
-import com.project.esavior.model.Location;
-import com.project.esavior.service.LocationService; // Service để xử lý logic
+import com.project.esavior.model.DriverLocation;
+import com.project.esavior.model.PatientLocation;
+import com.project.esavior.service.DriverLocationService;
+import com.project.esavior.service.PatientLocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,17 +14,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/locations")
-public class LocationController {
+@RequestMapping("/api/patientlocation")
+public class PatientLocationController {
 
     @Autowired
-    private LocationService locationService; // Inject service
+    private PatientLocationService patientLocationService; // Inject service
+    @Autowired
+    private DriverLocationService driverLocationService;
 
     @PostMapping("/update")
-    public ResponseEntity<String> updateLocation(@RequestBody Location location) {
+    public ResponseEntity<String> updateLocation(@RequestBody PatientLocation patientLocation) {
         try {
             // Gọi service để lưu vị trí
-            locationService.updateLocation(location);
+            patientLocationService.updateLocation(patientLocation);
             return new ResponseEntity<>("Location updated successfully", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Error updating location: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -34,10 +38,9 @@ public class LocationController {
         Double latitude = (Double) request.get("latitude");
         Double longitude = (Double) request.get("longitude");
 
-        Location location = new Location();
-        location.setDriverLatitude(latitude);
-        location.setDriverLongitude(longitude);
-        locationService.updateDriverLocation(driverId, location);  // Cập nhật vị trí tài xế
+        DriverLocation driverLocation = new DriverLocation(latitude , longitude);
+
+        driverLocationService.updateDriverLocation(driverId, driverLocation);  // Cập nhật vị trí tài xế
         System.out.println("Updating location for driverId: " + driverId + " with lat: " + latitude + ", long: " + longitude);
 
         return new ResponseEntity<>("Location updated successfully", HttpStatus.OK);
@@ -45,7 +48,7 @@ public class LocationController {
     @PostMapping("/location")
     public ResponseEntity<Map<String, Object>> getDriverLocation(@RequestBody Driver request) {
         Integer driverId = request.getDriverId();
-        Location location = locationService.getDriverLocation(driverId);  // Lấy vị trí tài xế
+        DriverLocation location = driverLocationService.getDriverLocation(driverId);  // Lấy vị trí tài xế
 
         if (location != null) {
             Map<String, Object> response = new HashMap<>();
@@ -57,8 +60,8 @@ public class LocationController {
         }
     }
     @GetMapping("/get-driver-location/{driverId}")
-    public ResponseEntity<Location> getDriverLocation(@PathVariable Integer driverId) {
-        Location location = locationService.getDriverLocation(driverId);
+    public ResponseEntity<DriverLocation> getDriverLocation(@PathVariable Integer driverId) {
+        DriverLocation location = driverLocationService.getDriverLocation(driverId);
         if (location != null) {
             System.out.println("Returning location for driverId: " + driverId);
             return new ResponseEntity<>(location, HttpStatus.OK);

@@ -1,14 +1,8 @@
 package com.project.esavior.controller;
 
 import com.project.esavior.dto.BookingDTO;
-import com.project.esavior.model.Booking;
-import com.project.esavior.model.Driver;
-import com.project.esavior.model.Location;
-import com.project.esavior.model.Patients;
-import com.project.esavior.service.BookingService;
-import com.project.esavior.service.DriverService;
-import com.project.esavior.service.LocationService;
-import com.project.esavior.service.PatientsService;
+import com.project.esavior.model.*;
+import com.project.esavior.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +23,13 @@ public class BookingController {
 
     private final BookingService bookingService;
     private final PatientsService patientsService;
-    private final LocationService locationService;
+    private final PatientLocationService patientLocationService;
     @Autowired
-    public BookingController(BookingService bookingService, PatientsService patientsService, DriverService driverService,LocationService locationService) {
+    public BookingController(BookingService bookingService, PatientsService patientsService, DriverService driverService,PatientLocationService patientLocationService) {
         this.bookingService = bookingService;
         this.patientsService = patientsService;
         this.driverService = driverService;
-        this.locationService = locationService;
+        this.patientLocationService = patientLocationService;
     }
 
 
@@ -68,19 +62,22 @@ public class BookingController {
         newBooking.setCost(bookingRequest.getCost());
         newBooking.setAmbulanceType(bookingRequest.getAmbulanceType());
 
-        // Cập nhật thông tin vị trí và khách hàng vào LocationService
-        locationService.updateLocationAndCustomerInfo(
-                new Location(bookingRequest.getLatitude(), bookingRequest.getLongitude()), // Truyền đúng đối tượng Location
-                patientOpt.get().getPatientName(), // Tên khách hàng
-                patientOpt.get().getPhoneNumber(), // Số điện thoại khách hàng
-                patientOpt.get().getEmail(), // Email khách hàng
-                bookingRequest.getDestinationLatitude(), // Latitude điểm đến
-                bookingRequest.getDestinationLongitude(),
-                bookingRequest.getBookingStatus()// Longitude điểm đến
-        );
-
-        // Lưu booking mới
+        // Lưu thông tin đặt chỗ mới vào cơ sở dữ liệu thông qua BookingService
         Booking savedBooking = bookingService.createBooking(newBooking);
+
+        // Cập nhật vị trí vào bảng PatientLocation (trong cơ sở dữ liệu)
+        PatientLocation patientLocation = new PatientLocation();
+        patientLocation.setPatientId(patientOpt.get().getPatientId());
+        patientLocation.setLatitude(bookingRequest.getLatitude());
+        patientLocation.setLongitude(bookingRequest.getLongitude());
+        patientLocation.setDestinationLatitude(bookingRequest.getDestinationLatitude());
+        patientLocation.setDestinationLongitude(bookingRequest.getDestinationLongitude());
+        patientLocation.setBookingStatus("Pending");
+        patientLocation.setCreatedAt(LocalDateTime.now());
+        patientLocation.setUpdatedAt(LocalDateTime.now());
+
+        // Lưu thông tin vị trí của bệnh nhân
+        patientLocationService.savePatientLocation(patientLocation);
 
         // Chuyển đổi Booking thành BookingDTO
         BookingDTO bookingDTO = convertToDTO(savedBooking);
@@ -93,19 +90,14 @@ public class BookingController {
     }
 
 
+
     @PostMapping("/update-status")
     public ResponseEntity<String> updateBookingStatus(@RequestBody Booking request) {
-        try {
+
             boolean isUpdated = bookingService.updateBookingStatus(request.getBookingId(), request.getBookingStatus());
-            locationService.setBookingStatus(request.getBookingStatus());
-            if (isUpdated) {
-                return ResponseEntity.status(HttpStatus.CREATED).body("Booking status updated successfully!");
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update booking status.");
-            }
-        } catch (Exception e) {
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while updating booking status.");
-        }
+
     }
 
 

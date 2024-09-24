@@ -114,6 +114,9 @@ public class BookingService {
 
         bookingRepository.save(booking);
     }
+    public List<Booking> getPendingBookingsByDriverId(Integer driverId) {
+        return bookingRepository.findByDriver_DriverIdAndBookingStatus(driverId, "Pending");
+    }
     public boolean updateBookingStatus(Integer bookingId, String status) {
         Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
         if (optionalBooking.isPresent()) {

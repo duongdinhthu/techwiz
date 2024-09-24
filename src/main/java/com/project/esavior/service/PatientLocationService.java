@@ -20,27 +20,11 @@ public class PatientLocationService {
     private PatientsRepository patientsRepository;
 
     // Cập nhật vị trí và thông tin bệnh nhân
-    public void updateLocationAndPatientInfo(PatientLocation location) {
-        // Tìm kiếm thông tin vị trí của bệnh nhân trong cơ sở dữ liệu
-        PatientLocation existingLocation = patientLocationRepository.findByPatientId(location.getPatientId());
-        if (existingLocation != null) {
-            // Nếu đã có vị trí, cập nhật thông tin mới
-            existingLocation.setLatitude(location.getLatitude());
-            existingLocation.setLongitude(location.getLongitude());
-            existingLocation.setDestinationLatitude(location.getDestinationLatitude());
-            existingLocation.setDestinationLongitude(location.getDestinationLongitude());
-            existingLocation.setBookingStatus(location.getBookingStatus());
-            patientLocationRepository.save(existingLocation);  // Lưu vào cơ sở dữ liệu
-        } else {
-            // Nếu chưa có, lưu vị trí bệnh nhân mới
-            patientLocationRepository.save(location);
-        }
-    }
     public void savePatientLocation(PatientLocation patientLocation) {
         patientLocationRepository.save(patientLocation); // Sử dụng repository để lưu
     }
     // Lấy vị trí và thông tin của bệnh nhân
-    public PatientLocation getCustomerLocation(int patientId) {
+    public PatientLocation getPaientLocation(int patientId) {
         return patientLocationRepository.findByPatientId(patientId);
     }
     public Map<String, Object> getPatientAndLocationInfo(Integer patientId) {
@@ -80,8 +64,6 @@ public class PatientLocationService {
         // Cập nhật các trường cần thiết
         patientLocation.setLatitude(patient.getLatitude());
         patientLocation.setLongitude(patient.getLongitude());
-        patientLocation.setDestinationLatitude(patient.getDestinationLatitude());
-        patientLocation.setDestinationLongitude(patient.getDestinationLongitude());
         patientLocation.setUpdatedAt(LocalDateTime.now());
 
         // Lưu vào cơ sở dữ liệu

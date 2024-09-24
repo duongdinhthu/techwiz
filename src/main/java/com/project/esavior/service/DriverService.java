@@ -45,7 +45,9 @@ public class DriverService {
                 })
                 .orElseThrow(() -> new IllegalArgumentException("Driver not found with ID: " + driverId));
     }
-
+    public Driver findDriverById(int id){
+        return driverRepository.findById(id);
+    }
     // Cập nhật trạng thái đặt chỗ
     public Booking updateBookingStatus(Integer bookingId, String status) {
         return bookingRepository.findById(bookingId)

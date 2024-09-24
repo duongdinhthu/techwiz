@@ -101,22 +101,40 @@ public class DriverController {
                 .toList(); // Chuyển đổi sang DTO
     }
 
-    // Quản lý tình trạng xe cứu thương
-    @PutMapping("/{driverId}/status")
-    public ResponseEntity<DriverDTO> updateDriverStatus(@PathVariable Integer driverId, @RequestParam String status) {
+    @PostMapping("/update-status")
+    public ResponseEntity<DriverDTO> updateDriverStatus(@RequestBody DriverDTO requestBody) {
         try {
+            // Lấy driverId và status từ requestBody
+            Integer driverId = requestBody.getDriverId();
+            String status = requestBody.getStatus();
+
+            // Kiểm tra xem tài xế có tồn tại không
+            Optional<Driver> driverOptional = driverService.findDriverById(driverId);
+            if (driverOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Không tìm thấy tài xế
+            }
+
+            // Cập nhật trạng thái tài xế
             Driver updatedDriver = driverService.updateDriverStatus(driverId, status);
-            DriverDTO updatedDriverDTO = convertToDTO(updatedDriver); // Chuyển đổi sang DTO
+
+            // Chuyển đổi sang DTO
+            DriverDTO updatedDriverDTO = convertToDTO(updatedDriver);
+
+            // Trả về kết quả
             return ResponseEntity.ok(updatedDriverDTO);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Lỗi yêu cầu không hợp lệ
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // Lỗi hệ thống
         }
     }
+
 
     // Cập nhật trạng thái đặt chỗ
     @PutMapping("/bookings/{bookingId}/status")
     public ResponseEntity<Booking> updateBookingStatus(@PathVariable Integer bookingId, @RequestParam String status) {
         try {
+            System.out.println("ok");
             Booking updatedBooking = driverService.updateBookingStatus(bookingId, status);
             return ResponseEntity.ok(updatedBooking);
         } catch (IllegalArgumentException e) {
@@ -220,6 +238,11 @@ public class DriverController {
             return ResponseEntity.noContent().build();
         }
     }
+
+
+
+
+
     @GetMapping("/get-driver-location/{driverId}")
     public ResponseEntity<Location> getDriverLocation(@PathVariable Integer driverId) {
         Location location = locationService.getDriverLocation(driverId);
@@ -284,29 +307,7 @@ public class DriverController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    // Cập nhật trạng thái tài xế
 
-
-
-//    @PostMapping("/nearest")
-//    public ResponseEntity<List<DriverDTO>> findNearestDrivers(@RequestBody Map<String, Double> location) {
-//        double latitude = location.get("latitude");
-//        double longitude = location.get("longitude");
-//
-//        // Tìm các tài xế gần nhất
-//        List<Driver> nearestDrivers = driverService.findNearestDrivers(latitude, longitude);
-//
-//        // Nếu không có tài xế gần nhất
-//        if (nearestDrivers.isEmpty()) {
-//            return ResponseEntity.noContent().build();
-//        }
-//
-//        // Chuyển đổi danh sách Driver thành danh sách DriverDTO với chỉ tên và số điện thoại
-//        List<DriverDTO> driverDTOs = nearestDrivers.stream()
-//                .map(driver -> new DriverDTO(driver.getDriverId(), driver.getDriverPhone(), driver.getDriverName(), driver.getLongitude(), driver.getLatitude()))
-//                .toList();
-//
-//        // Trả về danh sách tài xế gần nhất (DTOs)
-//        return ResponseEntity.ok(driverDTOs);
-//    }
 
 }
